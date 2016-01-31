@@ -1,17 +1,32 @@
 $background-color: #4e4e4e;
 $font-color: #dfdfdf;
 $div-color: #ccc;
-$square-color: #999;
+$square-color: #ccc;
 $border-color: #fff;
 
 body {
   background-color: $background-color;
   color: $font-color;
-  margin-top: 45px;
+  margin-top: 20px;
+}
+
+h1 {
+  text-align: center;
 }
 
 div {
   margin: 0 auto;
+}
+
+ul {
+  position: relative;;
+  top: 15px;
+  padding: 2px;
+}
+
+li {
+  display: inline;
+  padding: 15px 10%;
 }
 
 .game-box {
@@ -80,19 +95,27 @@ div {
 
 
 @media (min-width: 500px) {
+  body {
+    margin-top: 45px;
+  }
+
   .game-box {
     height: 425px;
     width: 425px;
   }
 
   .nav-bar {
-    height: 45px;
+    height: 38px;
     width: 405px;
   }
 
 }
 
 @media (min-width: 800px) {
+  body {
+    margin-top: 45px;
+  }
+
   .game-box {
     height: 500px;
     width: 500px;

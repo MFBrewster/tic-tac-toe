@@ -1,6 +1,6 @@
 'use strict';
 
-// A tray to hold value on the board
+// A tray to hold values on the board
 let board = new Array();
 
 // An object with the coordinates of each possible line
@@ -14,6 +14,19 @@ let lines = {
   tl2br:  [[0,0], [1,1], [2,2]],
   bl2tr:  [[0,2], [1,1], [2,0]],
 };
+
+// An array containing the possible lines for each tray position
+let linesForSquare = [
+  ['top', 'left', 'tl2br'],               // 0
+  ['top', 'midCol'],                      // 1
+  ['top', 'right', 'bl2tr'],              // 2
+  ['left', 'midRoW'],                     // 3
+  ['midRoW', 'midCol', 'tl2br', 'bl2tr'], // 4
+  ['midRoW', 'right'],                    // 5
+  ['bottom', 'left', 'bl2tr'],            // 6
+  ['bottom', 'midCol'],                   // 7
+  ['bottom', 'right', 'tl2br'],           // 8
+];
 
 // sets all values of the board tray to null
 let clearBoard = function(board) {
@@ -37,26 +50,8 @@ let winCheck = function(coordArray, board) {
   else { return false; }
 };
 
-clearBoard(board);
-board[0] = 'o';
-board[3] = 'o';
-board[7] = 'o';
-let check = winCheck(lines.left, board);
-console.log(check);
-
-// Original winCheck function. Requires value to be hardcoded into tray
-// Seems messy, will redo.
-
-// let tray = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-// let winCheck = function(t) {
-//   if (t[0] === t[1] && t[2] === t[3] || // top row
-//       t[0] === t[4] && t[0] === t[8] || // diagonal TR to BL
-//       t[0] === t[3] && t[0] === t[6] || // left column
-//       t[1] === t[4] && t[1] === t[7] || // middle column
-//       t[2] === t[4] && t[2] === t[6] || // diagonal TL to BR
-//       t[2] === t[5] && t[2] === t[8] || // right column
-//       t[3] === t[4] && t[3] === t[5] || // middle row
-//       t[6] === t[7] && t[6] === t[8] )  // bottom row
-//       { return true;
-//       } else { return false; }
-// }
+// Sets value of a square
+let setSquare = function(index, player, board) {
+  board[index] = player;
+  return;
+};

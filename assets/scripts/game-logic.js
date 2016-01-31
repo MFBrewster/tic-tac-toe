@@ -20,9 +20,9 @@ let linesForSquare = [
   ['top', 'left', 'tl2br'],               // 0
   ['top', 'midCol'],                      // 1
   ['top', 'right', 'bl2tr'],              // 2
-  ['left', 'midRoW'],                     // 3
-  ['midRoW', 'midCol', 'tl2br', 'bl2tr'], // 4
-  ['midRoW', 'right'],                    // 5
+  ['left', 'midRow'],                     // 3
+  ['midRow', 'midCol', 'tl2br', 'bl2tr'], // 4
+  ['midRow', 'right'],                    // 5
   ['bottom', 'left', 'bl2tr'],            // 6
   ['bottom', 'midCol'],                   // 7
   ['bottom', 'right', 'tl2br'],           // 8
@@ -30,7 +30,7 @@ let linesForSquare = [
 
 // sets all values of the board tray to null
 let clearBoard = function(board) {
-  for (let i = 0; i < board.length; i++) {
+  for (let i = 0; i < 9; i++) {
     board[i] = null;
   }
   return;
@@ -46,6 +46,7 @@ let winCheck = function(coordArray, board) {
   });
 
   // returns true if a line has been completed by either player
+  // !! WILL PROBABLY NOT NEED TO CHECK FOR BOTH PLAYERS !!
   if (boxVals === 'xxx' || boxVals === 'ooo') { return true; }
   else { return false; }
 };

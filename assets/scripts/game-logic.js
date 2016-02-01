@@ -5,27 +5,27 @@ let board = new Array();
 
 // An object with the coordinates of each possible line
 let lines = {
-  top:    [[0,0], [1,0], [2,0]],
-  midRow: [[0,1], [1,1], [2,1]],
-  bottom: [[0,2], [1,2], [2,2]],
-  left:   [[0,0], [0,1], [0,2]],
-  midCol: [[1,0], [1,1], [1,2]],
-  right:  [[2,0], [2,1], [2,2]],
-  tl2br:  [[0,0], [1,1], [2,2]],
-  bl2tr:  [[0,2], [1,1], [2,0]],
+  top:      [[0,0], [1,0], [2,0]],
+  midRow:   [[0,1], [1,1], [2,1]],
+  bottom:   [[0,2], [1,2], [2,2]],
+  left:     [[0,0], [0,1], [0,2]],
+  midCol:   [[1,0], [1,1], [1,2]],
+  right:    [[2,0], [2,1], [2,2]],
+  diagDown: [[0,0], [1,1], [2,2]],
+  diagUp:   [[0,2], [1,1], [2,0]],
 };
 
 // An array containing the possible lines for each tray position
 let linesForSquare = [
-  ['top', 'left', 'tl2br'],               // 0
-  ['top', 'midCol'],                      // 1
-  ['top', 'right', 'bl2tr'],              // 2
-  ['left', 'midRow'],                     // 3
-  ['midRow', 'midCol', 'tl2br', 'bl2tr'], // 4
-  ['midRow', 'right'],                    // 5
-  ['bottom', 'left', 'bl2tr'],            // 6
-  ['bottom', 'midCol'],                   // 7
-  ['bottom', 'right', 'tl2br'],           // 8
+  ['top', 'left', 'diagDown'],                // 0
+  ['top', 'midCol'],                          // 1
+  ['top', 'right', 'diagUp'],                 // 2
+  ['left', 'midRow'],                         // 3
+  ['midRow', 'midCol', 'diagDown', 'diagUp'], // 4
+  ['midRow', 'right'],                        // 5
+  ['bottom', 'left', 'diagUp'],               // 6
+  ['bottom', 'midCol'],                       // 7
+  ['bottom', 'right', 'diagDown'],            // 8
 ];
 
 // sets all values of the board tray to null
@@ -51,8 +51,13 @@ let winCheck = function(coordArray, board) {
   else { return false; }
 };
 
-// Sets value of a square
+// Sets value of a square, then checks to see whether the move results in a win
 let setSquare = function(index, player, board) {
   board[index] = player;
-  return;
+
+  for (let i = 0; i < linesForSquare[index].length; i++) {
+    if (winCheck( lines[linesForSquare[index][i]], board) ) { return true; }
+  }
+
+  return false;
 };

@@ -54,10 +54,12 @@ let winCheck = function(coordArray, board) {
 // Sets value of a square, then checks to see whether the move results in a win
 let setSquare = function(index, player, board) {
   board[index] = player;
-
+                    // "linesForSquare[index]" is an array of strings, which
+                    // corrrespond to keys in the "lines" object
   for (let i = 0; i < linesForSquare[index].length; i++) {
+                // for each key in "linesForSquare[index]", checks coordinates
+                //  stored in "lines" object to see if the game is won
     if (winCheck( lines[linesForSquare[index][i]], board) ) { return true; }
   }
-
   return false;
 };

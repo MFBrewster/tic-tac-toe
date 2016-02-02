@@ -1,7 +1,14 @@
 'use strict';
 
-// A tray to hold values on the board
-let board = new Array();
+let gameState = {
+  player: '',
+  xScore: 0,
+  yScore: 0,
+  over: false,
+  turn: 0,
+  game: 0,
+};
+let board = [];
 
 // An object with the coordinates of each possible line
 let lines = {
@@ -31,7 +38,7 @@ let linesForSquare = [
 // sets all values of the board tray to null
 let clearBoard = function(board) {
   for (let i = 0; i < 9; i++) {
-    board[i] = null;
+    board[i] = '';
   }
   return;
 };
@@ -63,3 +70,16 @@ let setSquare = function(index, player, board) {
   }
   return false;
 };
+
+let newGame = function(gameState, board) {
+  clearBoard(board);
+  gameState.player = 'x';
+  // if (game % 2 === 0) { player = 'x'; }
+  // else { player = 'o'; }
+  gameState.game++;
+  return;
+};
+
+console.log(gameState, board);
+newGame(gameState, board);
+console.log(gameState, board);

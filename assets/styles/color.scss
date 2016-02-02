@@ -1,0 +1,15 @@
+$background-color: #fff;
+$font-color: #555;
+$div-color: #fff;
+$square-color: #fff;
+$border-color: #555;
+$pure-white: #fff;
+$pure-black: #000;
+
+@function tint($color, $percentage) {
+  @return mix($pure-white, $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+  @return mix($pure-black, $color, $percentage);
+}

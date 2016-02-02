@@ -1,0 +1,65 @@
+.game-box {
+  background-color: $div-color;
+  height: 300px;
+  width: 300px;
+}
+
+.nav-bar {
+  background-color: $div-color;
+  height: 38px;
+  margin: 25px auto;
+  width: 285px;
+}
+
+.square {
+  background-color: $square-color;
+  border-width: 2px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  height: 33.33333%;
+  width: 33.33333%;
+}
+
+.square:hover {
+  background-color: shade($square-color, 10%);
+}
+
+.top {
+  border-bottom: $border-color;
+  border-bottom-style: solid;
+
+  .left {
+    clear: both;
+  }
+}
+
+.left {
+  border-right: $border-color;
+  border-right-style: solid;
+}
+
+.right {
+  border-left: $border-color;
+  border-left-style: solid;
+}
+
+.h-mid {
+  border-left: $border-color;
+  border-left-style: solid;
+  border-right: $border-color;
+  border-right-style: solid;
+}
+
+.v-mid {
+  border-bottom: $border-color;
+  border-bottom-style: solid;
+  border-top: $border-color;
+  border-top-style: solid;
+}
+
+.bottom {
+  border-top: $border-color;
+  border-top-style: solid;
+}

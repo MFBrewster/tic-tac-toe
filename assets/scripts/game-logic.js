@@ -45,16 +45,16 @@ let clearBoard = function(board) {
 
 // checks if a win has occurred on a given line
 let winCheck = function(coordArray, board) {
-  let boxVals = '';
+  let boxVals = [];
 
   // concatenates values at given board coordinates
   coordArray.forEach(function(val, index) {
-    boxVals += board[(coordArray[index][1] * 3) + coordArray[index][0]];
+    boxVals.push(board[(coordArray[index][1] * 3) + coordArray[index][0]]);
   });
 
   // returns true if a line has been completed by either player
   // !! WILL PROBABLY NOT NEED TO CHECK FOR BOTH PLAYERS !!
-  if (boxVals === 'xxx' || boxVals === 'ooo') { return true; }
+  if (boxVals[0] === boxVals[1] && boxVals[0] === boxVals[2]) { return true; }
   else { return false; }
 };
 
@@ -73,13 +73,14 @@ let setSquare = function(index, player, board) {
 
 let newGame = function(gameState, board) {
   clearBoard(board);
-  gameState.player = 'x';
-  // if (game % 2 === 0) { player = 'x'; }
-  // else { player = 'o'; }
+  if (gameState.game % 2 === 0) { gameState.player = 'x'; }
+  else { gameState.player = 'o'; }
   gameState.game++;
   return;
 };
 
-console.log(gameState, board);
 newGame(gameState, board);
-console.log(gameState, board);
+let one = setSquare(0, gameState.player, board);
+let two = setSquare(3, gameState.player, board);
+let three = setSquare(6, gameState.player, board);
+console.log(one, two, three);

@@ -43,6 +43,14 @@ let clearBoard = function(board) {
   return;
 };
 
+// toggles between players
+let changePlayer = function(player) {
+  if (!player || player === 'o') { player = 'x';
+  } else { player = 'o'; }
+
+  return player;
+};
+
 // checks if a win has occurred on a given line
 let winCheck = function(coordArray, board) {
   let boxVals = [];
@@ -59,8 +67,8 @@ let winCheck = function(coordArray, board) {
 };
 
 // Sets value of a square, then checks to see whether the move results in a win
-let setSquare = function(index, player, board) {
-  board[index] = player;
+let setSquare = function(index, gameState, board) {
+  board[index] = gameState.player;
                     // "linesForSquare[index]" is an array of strings, which
                     // corrrespond to keys in the "lines" object
   for (let i = 0; i < linesForSquare[index].length; i++) {
@@ -68,9 +76,12 @@ let setSquare = function(index, player, board) {
                 //  stored in "lines" object to see if the game is won
     if (winCheck( lines[linesForSquare[index][i]], board) ) { return true; }
   }
+  gameState.player = changePlayer(gameState.player);
   return false;
 };
 
+// clears the board, sets the player based on the game count, and increments
+// the game count
 let newGame = function(gameState, board) {
   clearBoard(board);
   if (gameState.game % 2 === 0) { gameState.player = 'x'; }
@@ -79,8 +90,17 @@ let newGame = function(gameState, board) {
   return;
 };
 
-newGame(gameState, board);
-let one = setSquare(0, gameState.player, board);
-let two = setSquare(3, gameState.player, board);
-let three = setSquare(6, gameState.player, board);
-console.log(one, two, three);
+    // oneGame function currently takes prompts from a browser dialog box.
+    // this sucks. Probably have reached the point where I have to start
+    // working with jQuery and accepting inputs from the user
+
+// let oneGame = function(gameState, board) {
+//   newGame(gameState, board);
+//   for (var i = 0; i < 9; i++) {
+//     let move = prompt(gameState.player + ', make your move: ');
+//     let gameOver = setSquare(move, gameState, board);
+//     if (gameOver) { break; }
+//   }
+// };
+//
+// oneGame(gameState, board);

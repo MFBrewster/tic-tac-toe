@@ -5,6 +5,12 @@ let gameState = {
   over: false,
   turn: 0,
   game: 0,
+
+  changePlayer: function() {
+    if (!this.player || this.player === 'o') { this.player = 'x';
+    } else { this.player = 'o'; }
+    return;
+  },
 };
 
 let score = {
@@ -44,15 +50,8 @@ let clearBoard = function(board) {
   for (let i = 0; i < 9; i++) {
     board[i] = '';
   }
+  $('.game-box').children().html("");
   return;
-};
-
-// toggles between players
-let changePlayer = function(player) {
-  if (!player || player === 'o') { player = 'x';
-  } else { player = 'o'; }
-
-  return player;
 };
 
 // checks if a win has occurred on a given line
@@ -85,7 +84,7 @@ let setSquare = function(index, gameState, board) {
       return true;
     }
   }
-  gameState.player = changePlayer(gameState.player);
+  gameState.changePlayer();
   return false;
 };
 

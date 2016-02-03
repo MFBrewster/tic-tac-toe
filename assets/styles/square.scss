@@ -6,13 +6,16 @@
 }
 
 .square {
-  background-color: $square-color;
-  border-width: 2px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  background-color: $square-color;
+  border-width: 2px;
   box-sizing: border-box;
   float: left;
+  font-size: $font-size * 4;
   height: 33.33333%;
+  text-align: center;
+  padding-top: 18px;
   width: 33.33333%;
 }
 

@@ -1,0 +1,65 @@
+.bar {
+  div {
+      margin: 15px auto;
+      padding: 10px;
+      text-align: center;
+  }
+
+  ul {
+    padding: 2px;
+    position: static;
+    margin: auto;
+  }
+
+  li {
+    display: inline;
+    padding: 3px;
+  }
+
+}
+
+.nav-bar {
+
+  div {
+    display: inline;
+    width: auto;
+    padding: 2px;
+    background-color: $nav-button-color;
+    color: $pure-black;
+    border-color: $pure-black;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 3px;
+  }
+
+  div:hover {
+    background-color: shade($nav-button-color, 20%);
+    cursor: pointer;
+  }
+}
+
+.scoreboard {
+  margin-top: 5px;
+  
+  div {
+    display: inline;
+    width: auto;
+    padding: 2px 25px 2px 2px;
+    background-color: $background-color;
+    color: $pure-black;
+    border-color: $pure-black;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 3px;
+  }
+
+  .score {
+    display: inline;
+    padding: 0 0 0 10px;
+    background-color: $background-color;
+    border-color: $background-color;
+    border-style: solid;
+    border-width: 0;
+    border-radius: 0;
+  }
+}

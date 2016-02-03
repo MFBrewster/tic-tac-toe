@@ -5,6 +5,7 @@ $square-color: #fff;
 $border-color: #555;
 $pure-white: #fff;
 $pure-black: #000;
+$nav-button-color: #ff8383;
 
 @function tint($color, $percentage) {
   @return mix($pure-white, $color, $percentage);

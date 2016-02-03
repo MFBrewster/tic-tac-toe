@@ -10,6 +10,12 @@ let gameState = {
       x: 0,
       o: 0,
       tie: 0,
+
+      resetScore: function() {
+        this.x = 0;
+        this.o = 0;
+        this.tie = 0;
+      },
   },
 
   changePlayer: function() {
@@ -70,6 +76,23 @@ let winCheck = function(coordArray, board) {
   else { return false; }
 };
 
+// clears the board, sets the player based on the game count, resets the turn
+// count,and increments the game count
+let newGame = function(gameState, board) {
+  clearBoard(board);
+  $('#x .score').html(gameState.score.x);
+  $('#o .score').html(gameState.score.o);
+  $('#tie .score').html(gameState.score.tie);
+  console.log(gameState.score);
+
+  if (gameState.game % 2 === 0) { gameState.player = 'x'; }
+  else { gameState.player = 'o'; }
+
+  gameState.turn = 0;
+  gameState.game++;
+  return;
+};
+
 // Sets value of a square, then checks to see whether the move results in a win
 let setSquare = function(index, gameState, board) {
   board[index] = gameState.player;
@@ -93,18 +116,6 @@ let setSquare = function(index, gameState, board) {
   }
   gameState.changePlayer();
   return false;
-};
-
-// clears the board, sets the player based on the game count, resets the turn
-// count,and increments the game count
-let newGame = function(gameState, board) {
-  clearBoard(board);
-  console.log(gameState.score);
-  if (gameState.game % 2 === 0) { gameState.player = 'x'; }
-  else { gameState.player = 'o'; }
-  gameState.turn = 0;
-  gameState.game++;
-  return;
 };
 
 $(document).ready(() => {

@@ -4,6 +4,8 @@ body {
   background-color: $background-color;
   color: $font-color;
   margin-top: 20px;
+  font-size: 12px;
+  font-family: 'Cinzel', serif;
 }
 
 h1 {
@@ -14,17 +16,8 @@ div {
   margin: 0 auto;
 }
 
-ul {
-  padding: 2px;
-  position: relative;
-  top: 15px;
-}
 
-li {
-  display: inline;
-  padding: 15px 10%;
-}
-
+@import 'bar';
 @import 'square';
 
 @media (min-width: 500px) {

@@ -9,9 +9,6 @@ require('./example');
 // load javascript file with game logic
 require('./game-logic');
 
-// // load event handlers
-// require('./handlers');
-
 // load sass manifest
 require('../styles/index.scss');
 

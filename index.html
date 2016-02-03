@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+      <link href='https://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet' type='text/css'>
       <link rel="stylesheet" type="text/css" href="styles/index.scss">
       <title>Example</title>
     </head>
     <body>
       <h1>Tic-Tac-Toe</h1>
-      <div class="nav-bar">
-        <ul>
-          <li>Game vs. Computer</li>
-          <li>Two Player Game</li>
-        </ul>
-      </div>
+
       <div class="game-box">
           <div class="top left square" id=0></div>
           <div class="top h-mid square" id=1></div>
@@ -23,7 +19,22 @@
           <div class="bottom h-mid square" id=7></div>
           <div class="bottom right square" id=8></div>
       </div>
-
+      <div class="bar">
+        <div class="nav-bar">
+          <ul>
+            <li><div>Vs. Computer</div></li>
+            <li><div>Two Player</div></li>
+            <li><div id=:"new-game">New Game</div></li>
+          </ul>
+        </div>
+        <div class="scoreboard">
+          <ul>
+            <li id="x"><div>x: <div class="score"></div></div></li>
+            <li id="o"><div>o: <div class="score"></div></div></li>
+            <li id="tie"><div>tie: <div class="score"></div></div></li>
+          </ul>
+        </div>
+      </div>
       <script src="http://localhost:8080/webpack-dev-server.js"></script>
       <script src="vendor.bundle.js" type="text/javascript" charset="utf-8"></script>
       <script src="bundle.js" type="text/javascript" charset="utf-8"></script>

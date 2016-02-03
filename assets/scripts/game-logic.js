@@ -2,12 +2,16 @@
 
 let gameState = {
   player: '',
-  xScore: 0,
-  yScore: 0,
   over: false,
   turn: 0,
   game: 0,
 };
+
+let score = {
+    x: 0,
+    y: 0,
+};
+
 let board = [];
 
 // An object with the coordinates of each possible line
@@ -74,7 +78,10 @@ let setSquare = function(index, gameState, board) {
   for (let i = 0; i < linesForSquare[index].length; i++) {
                 // for each key in "linesForSquare[index]", checks coordinates
                 //  stored in "lines" object to see if the game is won
-    if (winCheck( lines[linesForSquare[index][i]], board) ) { return true; }
+    if (winCheck( lines[linesForSquare[index][i]], board) ) {
+      gameState.over = true;
+      return true;
+    }
   }
   gameState.player = changePlayer(gameState.player);
   return false;
@@ -90,17 +97,18 @@ let newGame = function(gameState, board) {
   return;
 };
 
-    // oneGame function currently takes prompts from a browser dialog box.
-    // this sucks. Probably have reached the point where I have to start
-    // working with jQuery and accepting inputs from the user
-
-// let oneGame = function(gameState, board) {
-//   newGame(gameState, board);
-//   for (var i = 0; i < 9; i++) {
-//     let move = prompt(gameState.player + ', make your move: ');
-//     let gameOver = setSquare(move, gameState, board);
-//     if (gameOver) { break; }
-//   }
-// };
-//
-// oneGame(gameState, board);
+$(document).ready(() => {
+  newGame(gameState, board);
+  let over = false;
+  for(let turn = 0; turn < 9; turn++) {
+    $('.game-box').children().on('click', function() {
+      let move = event.target.id;
+      if (!board[move]) {
+      over = setSquare(move, gameState, board);
+      $(this).html(gameState.player);
+      }
+    });
+    if (over) { break; }
+  }
+  alert(gameState.player + ' wins!');
+});

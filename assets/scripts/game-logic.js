@@ -166,4 +166,6 @@ $(document).ready(() => {
     gameState.changePlayer();
     newGame(gameState, board);
   });
+
+  $('.sign-up-div').hide();
 });

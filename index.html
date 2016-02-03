@@ -20,7 +20,7 @@
           <div class="bottom right square" id=8></div>
       </div>
       <div class="bar">
-        <div class="nav-bar">
+        <div class="game-button">
           <ul>
             <li><div>Vs. Computer</div></li>
             <li><div>Two Player</div></li>
@@ -34,6 +34,27 @@
             <li id="tie"><div>tie: <div class="score"></div></div></li>
           </ul>
         </div>
+      </div>
+
+      <div class="sign-up-div">
+        <form id="sign-up">
+          <p>Sign up!</p>
+          <label>E-mail
+            <input type="text" name="credentials[email]" value="">
+          </label>
+          <label>Password
+            <input type="password" name="credentials[password]" value="">
+          </label>
+          <input type="submit" name="submit" value="Sign Up">
+        </form>
+      </div>
+
+      <div class="bottom-bar">
+        <ul>
+          <li><div class="api-button">Sign up!</div></li>
+          <li><div class="api-button">Sign in!</div></li>
+          <li><div class="api-button">Change password!</div></li>
+        </ul>
       </div>
       <script src="http://localhost:8080/webpack-dev-server.js"></script>
       <script src="vendor.bundle.js" type="text/javascript" charset="utf-8"></script>

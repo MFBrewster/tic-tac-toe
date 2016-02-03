@@ -5,7 +5,7 @@ $font-size: 12px;
 body {
   background-color: $background-color;
   color: $font-color;
-  margin-top: 20px;
+  margin-top: 50px;
   font-size: $font-size;
   font-family: 'Cinzel', serif;
 }
@@ -19,7 +19,7 @@ div {
   margin: 0 auto;
 }
 
-
+@import 'forms';
 @import 'bar';
 @import 'square';
 
@@ -37,7 +37,7 @@ div {
     width: 425px;
   }
 
-  .nav-bar {
+  .game-button {
     height: 38px;
     width: 405px;
   }
@@ -54,7 +54,7 @@ div {
     width: 500px;
   }
 
-  .nav-bar {
+  .game-button {
     height: 52px;
     width: 490px;
   }

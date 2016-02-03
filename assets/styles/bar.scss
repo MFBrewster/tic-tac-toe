@@ -18,12 +18,12 @@
 
 }
 
-.nav-bar {
+.game-button {
 
   div {
     display: inline;
     padding: 2px;
-    background-color: $nav-button-color;
+    background-color: $game-button-color;
     color: $pure-black;
     border-color: $pure-black;
     border-style: solid;
@@ -32,7 +32,7 @@
   }
 
   div:hover {
-    background-color: shade($nav-button-color, 20%);
+    background-color: shade($game-button-color, 20%);
     cursor: pointer;
   }
 }
@@ -60,5 +60,49 @@
     border-style: solid;
     border-width: 0;
     border-radius: 0;
+  }
+}
+
+
+.bottom-bar {
+  position:absolute;
+  bottom:0;
+  left:0;
+  width: 100%;
+  background-color: $bottom-bar-color;
+  height: 50px;
+  text-align: center;
+  border-top-style: solid;
+  border-top-color: $border-color;
+
+  div {
+      margin: 15px auto;
+      padding: 5px 20px;
+      text-align: center;
+  }
+
+  div:hover {
+    background-color: shade($game-button-color, 20%);
+    cursor: pointer;
+  }
+
+  ul {
+    padding: 2px;
+  }
+
+  li {
+    display: inline;
+    padding: 3px;
+  }
+
+  .api-button {
+    display: inline;
+    padding: 2px;
+    background-color: $game-button-color;
+    color: $pure-black;
+    border-color: $pure-black;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 3px;
   }
 }

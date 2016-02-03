@@ -61,6 +61,12 @@ let clearBoard = function(board) {
   return;
 };
 
+let displayScore = function(score) {
+  $('#x .score').html(score.x);
+  $('#o .score').html(score.o);
+  $('#tie .score').html(score.tie);
+}
+
 // checks if a win has occurred on a given line
 let winCheck = function(coordArray, board) {
   let boxVals = [];
@@ -80,9 +86,11 @@ let winCheck = function(coordArray, board) {
 // count,and increments the game count
 let newGame = function(gameState, board) {
   clearBoard(board);
-  $('#x .score').html(gameState.score.x);
-  $('#o .score').html(gameState.score.o);
-  $('#tie .score').html(gameState.score.tie);
+  gameState.over = false;
+  displayScore(gameState.score);
+  // $('#x .score').html(gameState.score.x);
+  // $('#o .score').html(gameState.score.o);
+  // $('#tie .score').html(gameState.score.tie);
   console.log(gameState.score);
 
   if (gameState.game % 2 === 0) { gameState.player = 'x'; }
@@ -123,8 +131,11 @@ $(document).ready(() => {
   $('.game-box').children().on('click', function() {
     let move = event.target.id;
     $(this).html(gameState.player);
-    if (!board[move]) {
+    if (!board[move]/* && !gameState.over*/) {
       gameState.over = setSquare(move, gameState, board);
     }
+  });
+  $('#new-game').on('click', function() {
+
   });
 });

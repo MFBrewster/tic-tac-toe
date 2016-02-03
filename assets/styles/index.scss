@@ -1,10 +1,12 @@
 @import 'color';
 
+$font-size: 12px;
+
 body {
   background-color: $background-color;
   color: $font-color;
   margin-top: 20px;
-  font-size: 12px;
+  font-size: $font-size;
   font-family: 'Cinzel', serif;
 }
 
@@ -19,6 +21,10 @@ div {
 
 @import 'bar';
 @import 'square';
+
+@media (min-width: 320px) {
+  font-size: $font-size / 2;
+}
 
 @media (min-width: 500px) {
   body {

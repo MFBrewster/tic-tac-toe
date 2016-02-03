@@ -6,16 +6,17 @@ let gameState = {
   turn: 0,
   game: 0,
 
+  score: {
+      x: 0,
+      o: 0,
+      tie: 0,
+  },
+
   changePlayer: function() {
     if (!this.player || this.player === 'o') { this.player = 'x';
     } else { this.player = 'o'; }
     return;
   },
-};
-
-let score = {
-    x: 0,
-    y: 0,
 };
 
 let board = [];
@@ -79,21 +80,29 @@ let setSquare = function(index, gameState, board) {
                 // for each key in "linesForSquare[index]", checks coordinates
                 //  stored in "lines" object to see if the game is won
     if (winCheck( lines[linesForSquare[index][i]], board) ) {
-      // alert(gameState.player + ' wins!')
+      gameState.score[gameState.player]++;
       newGame(gameState, board);
       return true;
     }
+  }
+  if (gameState.turn < 8) {
+    gameState.turn++;
+  } else {
+    gameState.score.tie++;
+    newGame(gameState, board);
   }
   gameState.changePlayer();
   return false;
 };
 
-// clears the board, sets the player based on the game count, and increments
-// the game count
+// clears the board, sets the player based on the game count, resets the turn
+// count,and increments the game count
 let newGame = function(gameState, board) {
   clearBoard(board);
+  console.log(gameState.score);
   if (gameState.game % 2 === 0) { gameState.player = 'x'; }
   else { gameState.player = 'o'; }
+  gameState.turn = 0;
   gameState.game++;
   return;
 };

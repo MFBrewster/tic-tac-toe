@@ -73,13 +73,15 @@ let winCheck = function(coordArray, board) {
 // Sets value of a square, then checks to see whether the move results in a win
 let setSquare = function(index, gameState, board) {
   board[index] = gameState.player;
+  console.log(board);
                     // "linesForSquare[index]" is an array of strings, which
                     // corrrespond to keys in the "lines" object
   for (let i = 0; i < linesForSquare[index].length; i++) {
                 // for each key in "linesForSquare[index]", checks coordinates
                 //  stored in "lines" object to see if the game is won
     if (winCheck( lines[linesForSquare[index][i]], board) ) {
-      gameState.over = true;
+      // alert(gameState.player + ' wins!')
+      newGame(gameState, board);
       return true;
     }
   }
@@ -99,16 +101,11 @@ let newGame = function(gameState, board) {
 
 $(document).ready(() => {
   newGame(gameState, board);
-  let over = false;
-  for(let turn = 0; turn < 9; turn++) {
-    $('.game-box').children().on('click', function() {
-      let move = event.target.id;
-      if (!board[move]) {
-      over = setSquare(move, gameState, board);
-      $(this).html(gameState.player);
-      }
-    });
-    if (over) { break; }
-  }
-  alert(gameState.player + ' wins!');
+  $('.game-box').children().on('click', function() {
+    let move = event.target.id;
+    $(this).html(gameState.player);
+    if (!board[move]) {
+      gameState.over = setSquare(move, gameState, board);
+    }
+  });
 });

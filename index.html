@@ -36,24 +36,40 @@
         </div>
       </div>
 
-      <div class="sign-up-div">
+      <div class="sign-up bigDiv">
         <form id="sign-up">
           <p>Sign up!</p>
           <label>E-mail
             <input type="text" name="credentials[email]" value="">
-          </label>
+          </label><br>
           <label>Password
             <input type="password" name="credentials[password]" value="">
-          </label>
+          </label><br>
+          <label>Confirm Password
+            <input name="credentials[password_confirmation]" type="password" value="">
+          </label><br>
           <input type="submit" name="submit" value="Sign Up">
+        </form>
+      </div>
+
+      <div class="sign-in bigDiv">
+        <form id="sign-in">
+          <p>Sign in!</p>
+          <label>E-mail
+            <input type="text" name="credentials[email]" value="">
+          </label><br>
+          <label>Password
+            <input type="password" name="credentials[password]" value="">
+          </label><br>
+          <input type="submit" name="submit" value="Sign In">
         </form>
       </div>
 
       <div class="bottom-bar">
         <ul>
-          <li><div class="api-button">Sign up!</div></li>
-          <li><div class="api-button">Sign in!</div></li>
-          <li><div class="api-button">Change password!</div></li>
+          <li><div id="sign-up-button" class="api-button">Sign up</div></li>
+          <li><div id="sign-in-button" class="api-button">Sign in</div></li>
+          <li><div class="api-button">Change password</div></li>
         </ul>
       </div>
       <script src="http://localhost:8080/webpack-dev-server.js"></script>

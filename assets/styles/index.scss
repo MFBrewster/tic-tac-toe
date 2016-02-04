@@ -19,9 +19,9 @@ div {
   margin: 0 auto;
 }
 
-@import 'forms';
 @import 'bar';
 @import 'square';
+@import 'forms';
 
 @media (min-width: 320px) {
   font-size: $font-size / 2;

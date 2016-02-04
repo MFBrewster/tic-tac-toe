@@ -29,6 +29,10 @@ let gameState = {
 
 let board = [];
 
+const myApp = {
+  baseUrl: "http://tic-tac-toe.wdibos.com",
+}
+
 // An object with the coordinates of each possible line
 let lines = {
   top:      [[0,0], [1,0], [2,0]],
@@ -167,5 +171,68 @@ $(document).ready(() => {
     newGame(gameState, board);
   });
 
-  $('.sign-up-div').hide();
+  $('.sign-up.bigDiv').hide();
+  $('.sign-in.bigDiv').hide();
+
+  $('#sign-up-button').on('click', function() {
+    $('.sign-up.bigDiv').show();
+  });
+
+  $('#sign-in-button').on('click', function() {
+    $('.sign-in.bigDiv').show();
+  });
+
+  $(document).keyup(function(e) {
+       if (e.keyCode === 27) {
+         $('.sign-up.bigDiv').hide();
+         $('.sign-in.bigDiv').hide();
+      }
+  });
+
+  $('#sign-up').on('submit', function(e) {
+
+    e.preventDefault();
+
+    var formData = new FormData(e.target);
+
+    $.ajax({
+
+      url: myApp.baseUrl + '/sign-up',
+      // url: 'http://httpbin.org/post',
+      method: 'POST',
+      contentType: false,
+      processData: false,
+      data: formData,
+
+    }).done(function(data) {
+      console.log(data);
+
+    }).fail(function(jqxhr) {
+      console.error(jqxhr);
+
+    });
+  });
+
+  $('#sign-in').on('submit', function(e) {
+
+    e.preventDefault();
+
+    var formData = new FormData(e.target);
+
+    $.ajax({
+
+      url: myApp.baseUrl + '/sign-in',
+      method: 'POST',
+      contentType: false,
+      processData: false,
+      data: formData,
+
+    }).done(function(data) {
+      myApp.user = data.user;
+      console.log(data);
+    }).fail(function(jqxhr) {
+      console.error(jqxhr);
+
+    });
+  });
 });

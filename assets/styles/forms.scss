@@ -1,5 +1,24 @@
-#sign-up {
+.bigDiv {
   position: fixed;
-  bottom: 50%;
-  left: auto;
+  top: 50%;
+  left: 50%;
+  margin-top: -90px; // Negative half of height.
+  margin-left: -137px; // Negative half of width.
+  background-color: $bottom-bar-color;
+  height: 180px;
+  width: 274px;
+  text-align: left;
+  padding-left: 20px;
+  border-style: solid;
+  border-color: $border-color;
+
+    form input {
+      padding: 3px;
+      margin: 5px;
+    }
+}
+
+.sign-in {
+  margin-top: -75px; // Negative half of height.
+  height: 150px;
 }

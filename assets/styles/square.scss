@@ -17,6 +17,7 @@
   text-align: center;
   padding-top: 18px;
   width: 33.33333%;
+  transition: background-color .25s;
 }
 
 .square:hover {
@@ -29,6 +30,7 @@
 
   .left {
     clear: both;
+    border-top-left-radius: 20px;
   }
 }
 

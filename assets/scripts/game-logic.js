@@ -31,7 +31,7 @@ let board = [];
 
 const myApp = {
   baseUrl: "http://tic-tac-toe.wdibos.com",
-}
+};
 
 // An object with the coordinates of each possible line
 let lines = {
@@ -148,6 +148,8 @@ let setSquare = function(index, gameState, board) {
 // On page load, sets up the board and sets event listeners
 $(document).ready(() => {
   newGame(gameState, board);
+  $('.sign-up.bigDiv').hide();
+  $('.sign-in.bigDiv').hide();
 
   // If any of the squares on the game board are clicked...
   $('.game-box').children().on('click', function() {
@@ -170,9 +172,6 @@ $(document).ready(() => {
     gameState.changePlayer();
     newGame(gameState, board);
   });
-
-  $('.sign-up.bigDiv').hide();
-  $('.sign-in.bigDiv').hide();
 
   $('#sign-up-button').on('click', function() {
     $('.sign-up.bigDiv').show();
@@ -206,7 +205,8 @@ $(document).ready(() => {
 
     }).done(function(data) {
       console.log(data);
-
+      $('.form-field').val('');
+      $('.bigDiv').hide();
     }).fail(function(jqxhr) {
       console.error(jqxhr);
 
@@ -230,9 +230,10 @@ $(document).ready(() => {
     }).done(function(data) {
       myApp.user = data.user;
       console.log(data);
+      $('.form-field').val('');
+      $('.bigDiv').hide();
     }).fail(function(jqxhr) {
       console.error(jqxhr);
-
     });
   });
 });

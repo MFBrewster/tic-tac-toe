@@ -29,6 +29,7 @@
     border-style: solid;
     border-width: 2px;
     border-radius: 3px;
+    transition: background-color .75s;
   }
 
   div:hover {
@@ -79,6 +80,7 @@
       margin: 15px auto;
       padding: 5px 20px;
       text-align: center;
+      transition: background-color .75s;
   }
 
   div:hover {

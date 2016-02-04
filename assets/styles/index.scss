@@ -19,6 +19,15 @@ div {
   margin: 0 auto;
 }
 
+.user-name {
+  font-family: 'Inconsolata', ;
+  font-size: $font-size * .8;
+  color: #f33;
+  position:absolute;
+  left: 5px;
+  bottom: 55px;
+}
+
 @import 'bar';
 @import 'square';
 @import 'forms';

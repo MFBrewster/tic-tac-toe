@@ -2,10 +2,10 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  margin-top: -90px; // Negative half of height.
+  margin-top: -75px;
+  height: 150px;
   margin-left: -137px; // Negative half of width.
   background-color: $bottom-bar-color;
-  height: 180px;
   width: 274px;
   text-align: left;
   padding-left: 20px;
@@ -18,7 +18,7 @@
     }
 }
 
-.sign-in {
-  margin-top: -75px; // Negative half of height.
-  height: 150px;
+.sign-up {
+  margin-top: -90px;
+  height: 180px;
 }

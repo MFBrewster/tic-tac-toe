@@ -2,6 +2,7 @@
 <html>
     <head>
       <link href='https://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet' type='text/css'>
+      <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
       <link rel="stylesheet" type="text/css" href="assets/styles/index.scss">
       <title>Example</title>
     </head>
@@ -38,7 +39,7 @@
 
       <div class="sign-up bigDiv">
         <form id="sign-up">
-          <p>Sign up!</p>
+          <p>Sign up</p>
           <label>E-mail
             <input class="form-field" type="text" name="credentials[email]" value="">
           </label><br>
@@ -54,7 +55,7 @@
 
       <div class="sign-in bigDiv">
         <form id="sign-in">
-          <p>Sign in!</p>
+          <p>Sign in</p>
           <label>E-mail
             <input class="form-field" type="text" name="credentials[email]" value="">
           </label><br>
@@ -65,11 +66,26 @@
         </form>
       </div>
 
+      <div class="change-password bigDiv">
+        <form id="change-password">
+          <p>Change password</p>
+          <label>Old Password
+            <input class="form-field" type="password" name="passwords[old]" value="">
+          </label><br>
+          <label>New Password
+            <input class="form-field" type="password" name="passwords[new]" value="">
+          </label>
+          <input type="submit" name="submit" value="Change Password">
+        </form>
+      </div>
+
+      <p class="user-name"></p>
       <div class="bottom-bar">
         <ul>
           <li><div id="sign-up-button" class="api-button">Sign up</div></li>
           <li><div id="sign-in-button" class="api-button">Sign in</div></li>
-          <li><div class="api-button">Change password</div></li>
+          <li><div id="change-password-button" class="api-button">Change password</div></li>
+          <li><div id="sign-out-button" class="api-button">Sign out</div></li>
         </ul>
       </div>
       <script src="http://localhost:8080/webpack-dev-server.js"></script>

@@ -1,5 +1,7 @@
 'use strict';
 
+let modalOpen = false;
+
 // All variable stored in a single object
 let gameState = {
   player: '',
@@ -148,8 +150,7 @@ let setSquare = function(index, gameState, board) {
 // On page load, sets up the board and sets event listeners
 $(document).ready(() => {
   newGame(gameState, board);
-  $('.sign-up.bigDiv').hide();
-  $('.sign-in.bigDiv').hide();
+  $('.bigDiv').hide();
 
   // If any of the squares on the game board are clicked...
   $('.game-box').children().on('click', function() {
@@ -158,7 +159,7 @@ $(document).ready(() => {
     // if the position on the board is empty, and the gameState.over variable
     // is not set to true, the board display indicated the move and the game
     // setSquare variable checks the win conditions
-    if (!board[move] && !gameState.over) {
+    if (!board[move] && !gameState.over && !modalOpen) {
       $(this).html(gameState.player);
       gameState.over = setSquare(move, gameState, board);
     }
@@ -169,22 +170,55 @@ $(document).ready(() => {
   // the game ends and the game counter is incremented, the same player
   // who started the current game will start the next one
   $('#new-game').on('click', function() {
-    gameState.changePlayer();
-    newGame(gameState, board);
+    if (!modalOpen) {
+      gameState.changePlayer();
+      newGame(gameState, board);
+    }
   });
 
   $('#sign-up-button').on('click', function() {
-    $('.sign-up.bigDiv').show();
+    if (!modalOpen) {
+      $('.sign-up.bigDiv').show();
+      modalOpen = true;
+    }
   });
 
   $('#sign-in-button').on('click', function() {
-    $('.sign-in.bigDiv').show();
+    if (!modalOpen) {
+      $('.sign-in.bigDiv').show();
+      modalOpen = true;
+    }
+  });
+
+  $('#change-password-button').on('click', function() {
+    if (!modalOpen) {
+      $('.change-password.bigDiv').show();
+      modalOpen = true;
+    }
+  });
+
+  $('#sign-out-button').on('click', function() {
+    $.ajax({
+      url: myApp.baseUrl + '/sign-out/' + myApp.user.id,
+      // url: 'http://httpbin.org/post',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Token token=' + myApp.user.token,
+      },
+      // contentType: false,
+      // processData: false,
+    }).done(function(data) {
+      console.log(data);
+      $('.user-name').html("");
+    }).fail(function(data) {
+      console.error(data);
+    });
   });
 
   $(document).keyup(function(e) {
        if (e.keyCode === 27) {
-         $('.sign-up.bigDiv').hide();
-         $('.sign-in.bigDiv').hide();
+         $('.bigDiv').hide();
+         modalOpen = false;
       }
   });
 
@@ -207,9 +241,10 @@ $(document).ready(() => {
       console.log(data);
       $('.form-field').val('');
       $('.bigDiv').hide();
+      modalOpen = false;
     }).fail(function(jqxhr) {
       console.error(jqxhr);
-
+      $('.form-field').val('');
     });
   });
 
@@ -232,8 +267,42 @@ $(document).ready(() => {
       console.log(data);
       $('.form-field').val('');
       $('.bigDiv').hide();
+      modalOpen = false;
+      $('.user-name').html("Signed in as " + myApp.user.email);
     }).fail(function(jqxhr) {
       console.error(jqxhr);
+      $('.form-field').val('');
+    });
+  });
+
+  $('#change-password').on('submit', function(e) {
+    e.preventDefault();
+    if (!myApp.user) {
+      console.error('Wrong!');
+      return;
+    }
+
+    var formData = new FormData(e.target);
+
+    $.ajax({
+
+      url: myApp.baseUrl + '/change-password/' + myApp.user.id,
+      // url: 'http://httpbin.org/post',
+      method: 'PATCH',
+      headers: {
+        Authorization: 'Token token=' + myApp.user.token,
+      },
+      contentType: false,
+      processData: false,
+      data: formData,
+    }).done(function(data) {
+      console.log(data);
+      $('.form-field').val('');
+      $('.bigDiv').hide();
+      modalOpen = false;
+    }).fail(function(jqxhr) {
+      console.error(jqxhr);
+      $('.form-field').val('');
     });
   });
 });

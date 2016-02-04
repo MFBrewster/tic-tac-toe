@@ -11,6 +11,7 @@ let gameState = {
   over: false,
   turn: 0,
   game: 0,
+  move: NaN,
 
   score: {
       x: 0,
@@ -94,6 +95,30 @@ let winCheck = function(coordArray, board) {
   else { return false; }
 };
 
+let updateGameApi = function(gameState) {
+  let formData = new FormData();
+
+  formData.append("game[cell][index]", gameState.move);
+  formData.append("game[cell][value]", gameState.player);
+  formData.append("game[over]", gameState.over);
+
+  $.ajax({
+
+    url: myApp.baseUrl + '/games/' + myApp.data.game.id,
+    method: 'PATCH',
+    headers: {
+      Authorization: 'Token token=' + myApp.user.token,
+    },
+    contentType: false,
+    processData: false,
+    data: formData,
+  }).done(function(data) {
+    console.log(data);
+  }).fail(function(jqxhr) {
+    console.error(jqxhr);
+  });
+};
+
 // Adds point to score of current player if a player won; otherwise adds a point
 // to the score for "tie". Increments gamecounter, sets "gameState.over" to
 // true, and updates the score display
@@ -105,6 +130,9 @@ let endGame = function(gameState, playerWin) {
   }
   gameState.game++;
   gameState.over = true;
+  if (apiState.signedIn) {
+    updateGameApi(gameState);
+  }
   displayScore(gameState.score);
   return;
 };
@@ -147,14 +175,14 @@ let newGame = function(gameState, board) {
 // Sets value of a square, then checks to see whether the move results in a win.
 // If a player makes a winning move, or nine turns have passed without a win,
 // the game ends.
-let setSquare = function(index, gameState, board) {
-  board[index] = gameState.player;
+let setSquare = function(gameState, board) {
+  board[gameState.move] = gameState.player;
                     // "linesForSquare[index]" is an array of strings, which
                     // corrrespond to keys in the "lines" object
-  for (let i = 0; i < linesForSquare[index].length; i++) {
+  for (let i = 0; i < linesForSquare[gameState.move].length; i++) {
                 // for each key in "linesForSquare[index]", checks coordinates
                 //  stored in "lines" object to see if the game is won
-    if (winCheck( lines[linesForSquare[index][i]], board) ) {
+    if (winCheck( lines[linesForSquare[gameState.move][i]], board) ) {
       endGame(gameState, true);
       return true;
     }
@@ -168,6 +196,9 @@ let setSquare = function(index, gameState, board) {
     endGame(gameState, false);
   }
 
+  if (apiState.signedIn) {
+    updateGameApi(gameState);
+  }
   // if the game doesn't end, toggles player
   gameState.changePlayer();
   return false;
@@ -181,13 +212,13 @@ $(document).ready(() => {
   // If any of the squares on the game board are clicked...
   $('.game-box').children().on('click', function() {
     // "move" is set to a value on the board from 0-8
-    let move = event.target.id;
+    gameState.move = event.target.id;
     // if the position on the board is empty, and the gameState.over variable
     // is not set to true, the board display indicated the move and the game
     // setSquare variable checks the win conditions
-    if (!board[move] && !gameState.over && !apiState.modalOpen) {
+    if (!board[gameState.move] && !gameState.over && !apiState.modalOpen) {
       $(this).html(gameState.player);
-      gameState.over = setSquare(move, gameState, board);
+      gameState.over = setSquare(gameState, board);
     }
   });
 

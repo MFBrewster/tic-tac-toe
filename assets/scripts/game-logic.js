@@ -1,6 +1,9 @@
 'use strict';
 
-let modalOpen = false;
+let apiState = {
+  modalOpen: false,
+  signedIn: false,
+};
 
 // All variable stored in a single object
 let gameState = {
@@ -106,6 +109,25 @@ let endGame = function(gameState, playerWin) {
   return;
 };
 
+let createGameApi = function() {
+  $.ajax({
+
+    url: myApp.baseUrl + '/games',
+    method: 'POST',
+    headers: {
+      Authorization: 'Token token=' + myApp.user.token,
+    },
+    contentType: false,
+    processData: false,
+    data: new FormData(),
+  }).done(function(data) {
+    myApp.data = data;
+    console.log(data);
+  }).fail(function(jqxhr) {
+    console.error(jqxhr);
+  });
+};
+
 // clears the board, sets the player based on the game count, resets the turn
 // count,and increments the game count
 let newGame = function(gameState, board) {
@@ -115,6 +137,10 @@ let newGame = function(gameState, board) {
   else { gameState.player = 'o'; }
   gameState.over = false;
   gameState.turn = 0;
+
+  if (apiState.signedIn) {
+    createGameApi();
+  }
   return;
 };
 
@@ -159,7 +185,7 @@ $(document).ready(() => {
     // if the position on the board is empty, and the gameState.over variable
     // is not set to true, the board display indicated the move and the game
     // setSquare variable checks the win conditions
-    if (!board[move] && !gameState.over && !modalOpen) {
+    if (!board[move] && !gameState.over && !apiState.modalOpen) {
       $(this).html(gameState.player);
       gameState.over = setSquare(move, gameState, board);
     }
@@ -170,55 +196,37 @@ $(document).ready(() => {
   // the game ends and the game counter is incremented, the same player
   // who started the current game will start the next one
   $('#new-game').on('click', function() {
-    if (!modalOpen) {
+    if (!apiState.modalOpen) {
       gameState.changePlayer();
       newGame(gameState, board);
     }
   });
 
   $('#sign-up-button').on('click', function() {
-    if (!modalOpen) {
+    if (!apiState.modalOpen) {
       $('.sign-up.bigDiv').show();
-      modalOpen = true;
+      apiState.modalOpen = true;
     }
   });
 
   $('#sign-in-button').on('click', function() {
-    if (!modalOpen) {
+    if (!apiState.modalOpen) {
       $('.sign-in.bigDiv').show();
-      modalOpen = true;
+      apiState.modalOpen = true;
     }
   });
 
   $('#change-password-button').on('click', function() {
-    if (!modalOpen) {
+    if (!apiState.modalOpen) {
       $('.change-password.bigDiv').show();
-      modalOpen = true;
+      apiState.modalOpen = true;
     }
-  });
-
-  $('#sign-out-button').on('click', function() {
-    $.ajax({
-      url: myApp.baseUrl + '/sign-out/' + myApp.user.id,
-      // url: 'http://httpbin.org/post',
-      method: 'DELETE',
-      headers: {
-        Authorization: 'Token token=' + myApp.user.token,
-      },
-      // contentType: false,
-      // processData: false,
-    }).done(function(data) {
-      console.log(data);
-      $('.user-name').html("");
-    }).fail(function(data) {
-      console.error(data);
-    });
   });
 
   $(document).keyup(function(e) {
        if (e.keyCode === 27) {
          $('.bigDiv').hide();
-         modalOpen = false;
+         apiState.modalOpen = false;
       }
   });
 
@@ -241,7 +249,7 @@ $(document).ready(() => {
       console.log(data);
       $('.form-field').val('');
       $('.bigDiv').hide();
-      modalOpen = false;
+      apiState.modalOpen = false;
     }).fail(function(jqxhr) {
       console.error(jqxhr);
       $('.form-field').val('');
@@ -267,7 +275,9 @@ $(document).ready(() => {
       console.log(data);
       $('.form-field').val('');
       $('.bigDiv').hide();
-      modalOpen = false;
+      apiState.signedIn = true;
+      apiState.modalOpen = false;
+      newGame(gameState, board);
       $('.user-name').html("Signed in as " + myApp.user.email);
     }).fail(function(jqxhr) {
       console.error(jqxhr);
@@ -287,7 +297,6 @@ $(document).ready(() => {
     $.ajax({
 
       url: myApp.baseUrl + '/change-password/' + myApp.user.id,
-      // url: 'http://httpbin.org/post',
       method: 'PATCH',
       headers: {
         Authorization: 'Token token=' + myApp.user.token,
@@ -299,10 +308,31 @@ $(document).ready(() => {
       console.log(data);
       $('.form-field').val('');
       $('.bigDiv').hide();
-      modalOpen = false;
+      apiState.modalOpen = false;
     }).fail(function(jqxhr) {
       console.error(jqxhr);
       $('.form-field').val('');
+    });
+  });
+
+  $('#sign-out-button').on('click', function() {
+    if (!myApp.user) {
+      console.error('Wrong!');
+      return;
+    }
+
+    $.ajax({
+      url: myApp.baseUrl + '/sign-out/' + myApp.user.id,
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Token token=' + myApp.user.token,
+      }
+
+    }).done(function(data) {
+      console.log(data);
+      $('.user-name').html("");
+    }).fail(function(data) {
+      console.error(data);
     });
   });
 });

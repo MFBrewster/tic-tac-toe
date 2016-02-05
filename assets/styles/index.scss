@@ -5,7 +5,7 @@ $font-size: 12px;
 body {
   background-color: $background-color;
   color: $font-color;
-  margin-top: 50px;
+  margin-top: 20px;
   font-size: $font-size;
   font-family: 'Cinzel', serif;
 }
@@ -19,18 +19,42 @@ div {
   margin: 0 auto;
 }
 
+@import 'bar';
+@import 'square';
+@import 'forms';
+
 .user-name {
   font-family: 'Inconsolata', ;
   font-size: $font-size * .8;
   color: #f33;
   position:absolute;
   left: 5px;
-  bottom: 55px;
+  bottom: 95px;
 }
 
-@import 'bar';
-@import 'square';
-@import 'forms';
+.my-games {
+  width: 300px;
+  height: 320px;
+  margin-top: -160px;
+  margin-left: -150px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-size: $font-size * .7;
+  h3 {
+    position: relative;
+    top: 5px;
+    left: 5px;
+    color: $pure-black;
+    font-size: $font-size;
+  }
+}
+
+@media (max-height: 600px) {
+  .game-box {
+    height: 300px;
+    width: 300px
+  }
+}
 
 @media (min-width: 320px) {
   font-size: $font-size / 2;

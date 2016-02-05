@@ -95,6 +95,30 @@ let winCheck = function(coordArray, board) {
   else { return false; }
 };
 
+let returnWinner = function(board, over) {
+  if (!over) { return 'Not Over'; }
+
+  let allLines = [
+    [0,0], [1,0], [2,0],
+    [0,1], [1,1], [2,1],
+    [0,2], [1,2], [2,2],
+    [0,0], [0,1], [0,2],
+    [1,0], [1,1], [1,2],
+    [2,0], [2,1], [2,2],
+    [0,0], [1,1], [2,2],
+    [0,2], [1,1], [2,0],
+  ];
+
+  let counter = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (winCheck(lines[i], board)) {
+      return board[(allLines[counter][0][1] * 3) + allLines[counter][0][0]];
+    } else { counter++; }
+  }
+  return 'Tie';
+};
+
 let updateGameApi = function(gameState) {
   let formData = new FormData();
 
@@ -204,6 +228,29 @@ let setSquare = function(gameState, board) {
   return false;
 };
 
+let listGames = function() {
+  $.ajax({
+    url: myApp.baseUrl + '/games',
+    type: 'GET',
+    headers: {
+      Authorization: 'Token token=' + myApp.user.token,
+    },
+  }).done(function(data) {
+    console.log(data);
+    let htmlInsert = '';
+    for (let i = 0; i < data.games.length; i++) {
+      htmlInsert += '<li id="" class="one-game">Game ID: ' + data.games[i].id +
+                    ', winner: ' + returnWinner(data.games[i].cells, data.games[i].over) +
+                    ',<br>player x: ' + data.games[i].player_x.email +
+                    ',<br>player o: ' + (data.games[i].player_o ? data.games[i].player_o.email : 'none</li>');
+    }
+
+    $('.games-list').html(htmlInsert);
+  }).fail(function(data) {
+    console.error(data);
+  });
+};
+
 // On page load, sets up the board and sets event listeners
 $(document).ready(() => {
   newGame(gameState, board);
@@ -248,8 +295,18 @@ $(document).ready(() => {
   });
 
   $('#change-password-button').on('click', function() {
-    if (!apiState.modalOpen) {
+  // for some reason this if statement doesn't work if I include the commented code
+    if (!apiState.modalOpen/* && !apiState.signedIn*/) {
       $('.change-password.bigDiv').show();
+      apiState.modalOpen = true;
+    }
+  });
+
+  $('#my-games-button').on('click', function() {
+    if (!apiState.modalOpen && apiState.signedIn) {
+      $('.games-label').html(myApp.user.email + "'s Games");
+      listGames();
+      $('.my-games.bigDiv').show();
       apiState.modalOpen = true;
     }
   });
@@ -358,9 +415,10 @@ $(document).ready(() => {
       headers: {
         Authorization: 'Token token=' + myApp.user.token,
       }
-
     }).done(function(data) {
       console.log(data);
+      apiState.signedIn = false;
+      newGame(gameState, board);
       $('.user-name').html("");
     }).fail(function(data) {
       console.error(data);

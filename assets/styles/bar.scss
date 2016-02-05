@@ -39,8 +39,6 @@
 }
 
 .scoreboard {
-  margin-top: 5px;
-
   div {
     display: inline;
     width: auto;
@@ -71,8 +69,8 @@
   left:0;
   width: 100%;
   background-color: $bottom-bar-color;
-  height: 50px;
-  font-size: $font-size * .8;
+  height: 90px;
+  font-size: $font-size;
   font-weight: bold;
   text-align: center;
   border-top-style: solid;
@@ -109,5 +107,9 @@
     border-style: solid;
     border-width: 2px;
     border-radius: 3px;
+  }
+
+  .my-games {
+    overflow-y: scroll;
   }
 }

@@ -143,14 +143,27 @@ let updateGameApi = function(gameState) {
   });
 };
 
+let winMessage = function(gameState, isWin) {
+  let messageText = '';
+
+  if (isWin) { messageText = gameState.player + ' wins!'; }
+  else { messageText = 'Cat\'s Game!'; }
+
+  $('#win-message').html(messageText);
+  $('#win-message').show();
+  return;
+};
+
 // Adds point to score of current player if a player won; otherwise adds a point
 // to the score for "tie". Increments gamecounter, sets "gameState.over" to
 // true, and updates the score display
 let endGame = function(gameState, playerWin) {
   if (playerWin) {
     gameState.score[gameState.player]++;
+    winMessage(gameState, playerWin);
   } else {
     gameState.score.tie++;
+    winMessage(gameState, playerWin);
   }
   gameState.game++;
   gameState.over = true;
@@ -184,6 +197,7 @@ let createGameApi = function() {
 // count,and increments the game count
 let newGame = function(gameState, board) {
   clearBoard(board);
+  $('#win-message').hide();
   displayScore(gameState.score);
   if (gameState.game % 2 === 0) { gameState.player = 'x'; }
   else { gameState.player = 'o'; }
@@ -255,15 +269,18 @@ let listGames = function() {
 $(document).ready(() => {
   newGame(gameState, board);
   $('.bigDiv').hide();
+  $('#win-message').hide();
 
   // If any of the squares on the game board are clicked...
   $('.game-box').children().on('click', function() {
     // "move" is set to a value on the board from 0-8
     gameState.move = event.target.id;
+    $('.bigDiv').hide();
+    apiState.modalOpen = false;
     // if the position on the board is empty, and the gameState.over variable
     // is not set to true, the board display indicated the move and the game
     // setSquare variable checks the win conditions
-    if (!board[gameState.move] && !gameState.over && !apiState.modalOpen) {
+    if (!board[gameState.move] && !gameState.over) {
       $(this).html(gameState.player);
       gameState.over = setSquare(gameState, board);
     }

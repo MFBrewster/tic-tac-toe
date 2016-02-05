@@ -26,12 +26,9 @@ div {
 #win-message {
   font-size: $font-size * 5;
   font-weight: bold;
-  height: auto;
-  // padding-bottom: 40px;
-  // padding-top: 40px;
+  padding: 20px 0;
   text-align: center;
-  top: 40%;
-  width: auto;
+  height: auto;
 }
 
 .user-name {

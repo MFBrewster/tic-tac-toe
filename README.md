@@ -21,7 +21,7 @@ The basic pattern of my work on this project would be a series of problems that 
 
 Frustrating problems included not realizing that I could not edit a variable inside of a function, unless it was declared inside of a reference object; not having an answer for how to connect the user clicks to a jquery event which changed the value of the apropriate data points (classmates were very helpful in helping me to a solution here); and not having all of my CSS code work the same way on the hosted page as it does on my local host.
 
-### What I Learned, What I would Do Differently
+### What I Learned, What I Would Do Differently
 
 I definitely learned the danger of going too far into your program logic before considering the form of the data which will be coming from the back end. There were times when I felt I had to completely retool aspects of my program, because I did not set up my inital game logic with a clear plan of how it would interact with the API. For future projects I will  make a very clear plan of what kind of data the server expects, and how that data will be formed, manipulated, and returned to the back end.
 

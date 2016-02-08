@@ -23,8 +23,8 @@ Frustrating problems included not realizing that I could not edit a variable ins
 
 ### What I Learned, What I would Do Differently
 
-I definitely learned the danger of going too far into your program logic before considering the form of the data which will be coming from the back end. There were definitely times when I felt I had to completely retool aspects of my program, because I didnot set up my inital game logic with a clear plan of how it would interact with the API. For future projects I will  make a very clear plan of what kind of data the server expects, and how that data will be formed, manipulated, and returned to the backend.
+I definitely learned the danger of going too far into your program logic before considering the form of the data which will be coming from the back end. There were times when I felt I had to completely retool aspects of my program, because I did not set up my inital game logic with a clear plan of how it would interact with the API. For future projects I will  make a very clear plan of what kind of data the server expects, and how that data will be formed, manipulated, and returned to the back end.
 
 ### Why Should You Hire Me
 
-I think this program dmonstrates my ability to solve problems both on my own and collaboratively in order to deliver a product which satisfies a given set of conditions and expectations. Building a working gamesingle-page application which interacts with an API, only days after learning how to use ajax, demonstrates my ability to learn and adapt quickly. Though it is not perfect, it is presented as an important step in my process of learning to be a web developer.
+I think this program dmonstrates my ability to solve problems both on my own and collaboratively in order to deliver a product which satisfies a given set of conditions and expectations. Building a working single-page application which interacts with an API, only days after learning how to use ajax, demonstrates my ability to learn and adapt quickly. Though it is not perfect, it is presented as an important step in my process of learning to be a web developer.

@@ -1,6 +1,6 @@
 # General Assembly WDI Project 1: Tic-Tac-Toe
 
-For this project my goal was to code a tic-tac-toe game which worked in the browser according to the game rules, which interacted with a backend in order to give and receive information, as well as update server information. I coded with HTML, CSS, Javascript, and the jQuery library in order to make a presentable board; I created game logic which worked correctly and consistently while updating the visual game board; and I created an interactive user experience allowing the user to access past games played.
+For this project my goal was to code a tic-tac-toe game which worked in the browser according to the game rules, which interacted with a backend in order to give and receive information, and which updates information server-side. I coded with HTML, CSS, Javascript, and the jQuery library in order to make a presentable board; I created game logic which worked correctly and consistently while updating the visual game board; and I created an interactive user experience allowing the user to access past games played.
 
 ### User Stories, Wireframe, and Basic Problems
 
@@ -8,7 +8,7 @@ Admittedly, I was eager to get to work in the actual code, and so I kept my sket
 
 ##### Wireframe of Layout
 
-![Wireframe](https://github.com/MFBrewster/tic-tac-toe/blob/master/wireframe.jpg "Basic Wirefram")
+![Wireframe](https://github.com/MFBrewster/tic-tac-toe/blob/master/wireframe.jpg "Basic Wireframe")
 
 ##### User Stories and Basic Problems
 
@@ -19,7 +19,7 @@ Admittedly, I was eager to get to work in the actual code, and so I kept my sket
 The basic pattern of my work on this project would be a series of problems that seemed relatively easy to solve and could be taken care of in short order, followed by a problem which I had assumed would be easy, but which ends up taking forever to fix. Moments of triumph included updating the game box depending on user clicks, connecting the display on the screen with the javascript game logic, and succesfully interacting with the back end. 
 
 
-Frustrating problems included not realizing that I could not edit a variable inside of a function, unless it was declared inside of a reference object; not having an answer for how to connect the user clicks to a jquery event which changed the value of the apropriate data points (classmates were very helpful in helping me to a solution here); and not having all of my CSS code work the same way on the hosted page as it does on my local host.
+Frustrating problems included not realizing that I could not edit a variable inside of a function, unless it was declared as an element of a reference object; not having an answer for how to connect the user clicks to a jquery event which changed the value of the apropriate data points (classmates were very helpful in helping me to a solution here); and not having all of my CSS code work the same way on the hosted page as it does on my local host.
 
 ### What I Learned, What I Would Do Differently
 

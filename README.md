@@ -27,4 +27,4 @@ I definitely learned the danger of going too far into your program logic before 
 
 ### Why You Should Hire Me
 
-I think this program dmonstrates my ability to solve problems both on my own and collaboratively in order to deliver a product which satisfies a given set of conditions and expectations. Building a working single-page application which interacts with an API, only days after learning how to use ajax, demonstrates my ability to learn and adapt quickly. Though it is not perfect, it is presented as an important step in my process of learning to be a web developer.
+I think this program demonstrates my ability to solve problems both on my own and collaboratively in order to deliver a product which satisfies a given set of conditions and expectations. Building a working single-page application which interacts with an API, only days after learning how to use ajax, demonstrates my ability to learn and adapt quickly. Though it is not perfect, it is presented as an important step in my process of learning to be a web developer.

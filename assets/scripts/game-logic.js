@@ -78,9 +78,9 @@ let clearBoard = function(gamestate) {
 
 // Updates the score box displays
 let displayScore = function(score) {
-  $('#x .score').html(score.x);
-  $('#o .score').html(score.o);
-  $('#tie .score').html(score.tie);
+  $('#x .score').html(gamestate.score.x);
+  $('#o .score').html(gamestate.score.o);
+  $('#tie .score').html(gamestate.score.tie);
 };
 
 // checks if a win has occurred on a given line
@@ -119,24 +119,6 @@ let returnWinner = function(board, over) {
     } else { counter++; }
   }
   return 'Tie';
-};
-
-let updateFromApiToGame = function() {
-  $.ajax({
-    url: myApp.baseUrl + '/games',
-    type: 'GET',
-    headers: {
-      Authorization: 'Token token=' + myApp.user.token,
-    },
-  }).done(function(data, gamestate) {
-    gamestate.cells = data.cells;
-    gamestate.id = data.id;
-    gamestate.over = data.over;
-    gamestate.player_o = data.player_o;
-    gamestate.player_x = data.player_x;
-  }).fail(function(data) {
-    console.error(data);
-  });
 };
 
 let updateFromGameToApi = function(gamestate) {
@@ -178,13 +160,10 @@ let winMessage = function(gamestate, isWin) {
 // to the score for "tie". Increments gamecounter, sets "gamestate.over" to
 // true, and updates the score display
 let endGame = function(gamestate, playerWin) {
-  if (playerWin) {
-    gamestate.score[gamestate.player]++;
-    winMessage(gamestate, playerWin);
-  } else {
-    gamestate.score.tie++;
-    winMessage(gamestate, playerWin);
-  }
+  playerWin ?  gamestate.score[gamestate.player]++ : gamestate.score.tie++;
+
+  winMessage(gamestate, playerWin);
+
   gamestate.game++;
   gamestate.over = true;
   if (apiState.signedIn) {
@@ -192,10 +171,6 @@ let endGame = function(gamestate, playerWin) {
   }
   displayScore(gamestate.score);
   return;
-};
-
-let setBoard = function(gamestate) {
-
 };
 
 let createGameApi = function() {
@@ -300,12 +275,10 @@ $(document).ready(() => {
   $('#win-message').hide();
 
 
-  // CRITICAL CODE for game logic.
+  // IMPORTANT
   // Recieves click input from user on board
-  // If any of the squares on the game board are clicked...
   $('.game-box').children().on('click', function() {
-    // updates tray with user input
-    gamestate.cells[event.target.id] = gamestate.player;
+    // hides open windows
     $('.bigDiv').hide();
     apiState.modalOpen = false;
     // if the position on the board is empty, and the gamestate.over variable
@@ -313,6 +286,7 @@ $(document).ready(() => {
     // setSquare variable checks the win conditions
     if (!gamestate.cells[event.target.id] && !gamestate.over) {
       $(this).html(gamestate.player);
+      gamestate.move = event.target.id;
       gamestate.over = setSquare(gamestate, board);
     }
   });

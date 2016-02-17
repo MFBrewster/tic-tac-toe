@@ -139,6 +139,8 @@ let updateFromGameToApi = function(gamestate) {
     processData: false,
     data: formData,
   }).done(function(data) {
+    console.log("Updated Successfully!");
+    console.log(gamestate);
     console.log(data);
   }).fail(function(jqxhr) {
     console.error(jqxhr);

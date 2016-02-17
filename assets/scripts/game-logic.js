@@ -78,9 +78,9 @@ let clearBoard = function(gamestate) {
 
 // Updates the score box displays
 let displayScore = function(score) {
-  $('#x .score').html(gamestate.score.x);
-  $('#o .score').html(gamestate.score.o);
-  $('#tie .score').html(gamestate.score.tie);
+  $('#x .score').html(score.x);
+  $('#o .score').html(score.o);
+  $('#tie .score').html(score.tie);
 };
 
 // checks if a win has occurred on a given line
@@ -185,11 +185,6 @@ let createGameApi = function() {
     processData: false,
     data: new FormData(),
   }).done(function(data, gamestate) {
-    gamestate.cells = data.cells;
-    gamestate.id = data.id;
-    gamestate.over = data.over;
-    gamestate.player_o = data.player_o;
-    gamestate.player_x = data.player_x;
     console.log(data);
   }).fail(function(jqxhr) {
     console.error(jqxhr);
@@ -236,10 +231,8 @@ let setSquare = function(gamestate) {
   } else {
     endGame(gamestate, false);
   }
+  //
 
-  if (apiState.signedIn) {
-    updateFromGameToApi(gamestate);
-  }
   // if the game doesn't end, toggles player
   gamestate.changePlayer();
   return false;
@@ -289,6 +282,8 @@ $(document).ready(() => {
       gamestate.move = event.target.id;
       gamestate.over = setSquare(gamestate, board);
     }
+
+    if (apiState.signedIn) { updateFromGameToApi(gamestate); }
   });
 
   // When the new-game button is clicked, the player is toggled before the

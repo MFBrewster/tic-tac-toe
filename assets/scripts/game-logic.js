@@ -130,7 +130,7 @@ let updateFromGameToApi = function(gamestate) {
 
   $.ajax({
 
-    url: myApp.baseUrl + '/games/' + myApp.data.game.id,
+    url: myApp.baseUrl + '/games/' + myApp.id,
     method: 'PATCH',
     headers: {
       Authorization: 'Token token=' + myApp.user.token,
@@ -163,13 +163,10 @@ let endGame = function(gamestate, playerWin) {
   playerWin ?  gamestate.score[gamestate.player]++ : gamestate.score.tie++;
 
   winMessage(gamestate, playerWin);
+  displayScore(gamestate.score);
 
   gamestate.game++;
   gamestate.over = true;
-  if (apiState.signedIn) {
-    updateFromGameToApi(gamestate);
-  }
-  displayScore(gamestate.score);
   return;
 };
 
@@ -184,7 +181,8 @@ let createGameApi = function() {
     contentType: false,
     processData: false,
     data: new FormData(),
-  }).done(function(data, gamestate) {
+  }).done(function(data) {
+    myApp.id = data.game.id;
     console.log(data);
   }).fail(function(jqxhr) {
     console.error(jqxhr);

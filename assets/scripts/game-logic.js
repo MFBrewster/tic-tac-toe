@@ -6,12 +6,14 @@ let apiState = {
 };
 
 // All variable stored in a single object
-let gameState = {
+let gamestate = {
   player: '',
+  cells: [],
   over: false,
   turn: 0,
   game: 0,
   move: NaN,
+  id: NaN,
 
   score: {
       x: 0,
@@ -65,9 +67,9 @@ let linesForSquare = [
 ];
 
 // sets all values of the board tray to null...
-let clearBoard = function(board) {
+let clearBoard = function(gamestate) {
   for (let i = 0; i < 9; i++) {
-    board[i] = '';
+    gamestate.cells[i] = '';
   }
   // ... and clears the HTML board
   $('.game-box').children().html("");
@@ -119,16 +121,16 @@ let returnWinner = function(board, over) {
   return 'Tie';
 };
 
-let updateGameApi = function(gameState) {
+let updateFromGameToApi = function(gamestate) {
   let formData = new FormData();
 
-  formData.append("game[cell][index]", gameState.move);
-  formData.append("game[cell][value]", gameState.player);
-  formData.append("game[over]", gameState.over);
+  formData.append("game[cell][index]", gamestate.move);
+  formData.append("game[cell][value]", gamestate.player);
+  formData.append("game[over]", gamestate.over);
 
   $.ajax({
 
-    url: myApp.baseUrl + '/games/' + myApp.data.game.id,
+    url: myApp.baseUrl + '/games/' + myApp.id,
     method: 'PATCH',
     headers: {
       Authorization: 'Token token=' + myApp.user.token,
@@ -143,10 +145,10 @@ let updateGameApi = function(gameState) {
   });
 };
 
-let winMessage = function(gameState, isWin) {
+let winMessage = function(gamestate, isWin) {
   let messageText = '';
 
-  if (isWin) { messageText = gameState.player + ' wins!'; }
+  if (isWin) { messageText = gamestate.player + ' wins!'; }
   else { messageText = 'Cat\'s Game!'; }
 
   $('#win-message').html(messageText);
@@ -155,22 +157,16 @@ let winMessage = function(gameState, isWin) {
 };
 
 // Adds point to score of current player if a player won; otherwise adds a point
-// to the score for "tie". Increments gamecounter, sets "gameState.over" to
+// to the score for "tie". Increments gamecounter, sets "gamestate.over" to
 // true, and updates the score display
-let endGame = function(gameState, playerWin) {
-  if (playerWin) {
-    gameState.score[gameState.player]++;
-    winMessage(gameState, playerWin);
-  } else {
-    gameState.score.tie++;
-    winMessage(gameState, playerWin);
-  }
-  gameState.game++;
-  gameState.over = true;
-  if (apiState.signedIn) {
-    updateGameApi(gameState);
-  }
-  displayScore(gameState.score);
+let endGame = function(gamestate, playerWin) {
+  playerWin ?  gamestate.score[gamestate.player]++ : gamestate.score.tie++;
+
+  winMessage(gamestate, playerWin);
+  displayScore(gamestate.score);
+
+  gamestate.game++;
+  gamestate.over = true;
   return;
 };
 
@@ -186,7 +182,7 @@ let createGameApi = function() {
     processData: false,
     data: new FormData(),
   }).done(function(data) {
-    myApp.data = data;
+    myApp.id = data.game.id;
     console.log(data);
   }).fail(function(jqxhr) {
     console.error(jqxhr);
@@ -195,14 +191,14 @@ let createGameApi = function() {
 
 // clears the board, sets the player based on the game count, resets the turn
 // count,and increments the game count
-let newGame = function(gameState, board) {
-  clearBoard(board);
+let newGame = function(gamestate) {
+  clearBoard(gamestate);
   $('#win-message').hide();
-  displayScore(gameState.score);
-  if (gameState.game % 2 === 0) { gameState.player = 'x'; }
-  else { gameState.player = 'o'; }
-  gameState.over = false;
-  gameState.turn = 0;
+  displayScore(gamestate.score);
+  if (gamestate.game % 2 === 0) { gamestate.player = 'x'; }
+  else { gamestate.player = 'o'; }
+  gamestate.over = false;
+  gamestate.turn = 0;
 
   if (apiState.signedIn) {
     createGameApi();
@@ -213,32 +209,30 @@ let newGame = function(gameState, board) {
 // Sets value of a square, then checks to see whether the move results in a win.
 // If a player makes a winning move, or nine turns have passed without a win,
 // the game ends.
-let setSquare = function(gameState, board) {
-  board[gameState.move] = gameState.player;
+let setSquare = function(gamestate) {
+  gamestate.cells[gamestate.move] = gamestate.player;
                     // "linesForSquare[index]" is an array of strings, which
                     // corrrespond to keys in the "lines" object
-  for (let i = 0; i < linesForSquare[gameState.move].length; i++) {
+  for (let i = 0; i < linesForSquare[gamestate.move].length; i++) {
                 // for each key in "linesForSquare[index]", checks coordinates
                 //  stored in "lines" object to see if the game is won
-    if (winCheck( lines[linesForSquare[gameState.move][i]], board) ) {
-      endGame(gameState, true);
+    if (winCheck( lines[linesForSquare[gamestate.move][i]], gamestate.cells) ) {
+      endGame(gamestate, true);
       return true;
     }
   }
 
   // If statement which either increments the turn
   // counter, or ends the game in a tie
-  if (gameState.turn < 8) {
-    gameState.turn++;
+  if (gamestate.turn < 8) {
+    gamestate.turn++;
   } else {
-    endGame(gameState, false);
+    endGame(gamestate, false);
   }
+  //
 
-  if (apiState.signedIn) {
-    updateGameApi(gameState);
-  }
   // if the game doesn't end, toggles player
-  gameState.changePlayer();
+  gamestate.changePlayer();
   return false;
 };
 
@@ -253,10 +247,10 @@ let listGames = function() {
     console.log(data);
     let htmlInsert = '';
     for (let i = 0; i < data.games.length; i++) {
-      htmlInsert += '<li id="" class="one-game">Game ID: ' + data.games[i].id +
-                    ', winner: ' + returnWinner(data.games[i].cells, data.games[i].over) +
-                    ',<br>player x: ' + data.games[i].player_x.email +
-                    ',<br>player o: ' + (data.games[i].player_o ? data.games[i].player_o.email : 'none</li>');
+      htmlInsert += `<li id="" class="one-game">Game ID: ${data.games[i].id},
+                    winner: ${returnWinner(data.games[i].cells, data.games[i].over)},
+                    <br>player x: ${data.games[i].player_x.email}<br>
+                    player o: ${data.games[i].player_o ? data.games[i].player_o.email : 'none'}</li>`;
     }
 
     $('.games-list').html(htmlInsert);
@@ -267,23 +261,27 @@ let listGames = function() {
 
 // On page load, sets up the board and sets event listeners
 $(document).ready(() => {
-  newGame(gameState, board);
+  newGame(gamestate);
   $('.bigDiv').hide();
   $('#win-message').hide();
 
-  // If any of the squares on the game board are clicked...
+
+  // IMPORTANT
+  // Recieves click input from user on board
   $('.game-box').children().on('click', function() {
-    // "move" is set to a value on the board from 0-8
-    gameState.move = event.target.id;
+    // hides open windows
     $('.bigDiv').hide();
     apiState.modalOpen = false;
-    // if the position on the board is empty, and the gameState.over variable
+    // if the position on the board is empty, and the gamestate.over variable
     // is not set to true, the board display indicated the move and the game
     // setSquare variable checks the win conditions
-    if (!board[gameState.move] && !gameState.over) {
-      $(this).html(gameState.player);
-      gameState.over = setSquare(gameState, board);
+    if (!gamestate.cells[event.target.id] && !gamestate.over) {
+      $(this).html(gamestate.player);
+      gamestate.move = event.target.id;
+      gamestate.over = setSquare(gamestate, board);
     }
+
+    if (apiState.signedIn) { updateFromGameToApi(gamestate); }
   });
 
   // When the new-game button is clicked, the player is toggled before the
@@ -292,8 +290,8 @@ $(document).ready(() => {
   // who started the current game will start the next one
   $('#new-game').on('click', function() {
     if (!apiState.modalOpen) {
-      gameState.changePlayer();
-      newGame(gameState, board);
+      gamestate.changePlayer();
+      newGame(gamestate, board);
     }
   });
 
@@ -382,7 +380,7 @@ $(document).ready(() => {
       $('.bigDiv').hide();
       apiState.signedIn = true;
       apiState.modalOpen = false;
-      newGame(gameState, board);
+      newGame(gamestate, board);
       $('.user-name').html("Signed in as " + myApp.user.email);
     }).fail(function(jqxhr) {
       console.error(jqxhr);
@@ -435,7 +433,7 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       apiState.signedIn = false;
-      newGame(gameState, board);
+      newGame(gamestate, board);
       $('.user-name').html("");
     }).fail(function(data) {
       console.error(data);

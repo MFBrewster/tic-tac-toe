@@ -98,21 +98,13 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(4);
+	module.exports = __webpack_require__(3);
 
 
 /***/ },
 /* 1 */,
-/* 2 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = true;
-
-/***/ },
-/* 3 */,
-/* 4 */
+/* 2 */,
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!

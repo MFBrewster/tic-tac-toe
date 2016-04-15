@@ -10,11 +10,11 @@ webpackJsonp([0],[
 	// load manifests
 
 	__webpack_require__(1);
-	__webpack_require__(5);
+	__webpack_require__(4);
 
 	// attach jQuery globally
+	__webpack_require__(8);
 	__webpack_require__(9);
-	__webpack_require__(10);
 
 /***/ },
 /* 1 */
@@ -25,23 +25,19 @@ webpackJsonp([0],[
 	// user require with a reference to bundle the file and use it in this file
 	// var example = require('./example');
 
-	// use require without a reference to ensure a file is bundled
+	// load javascript file with game logic
 
 	__webpack_require__(2);
 
-	// load javascript file with game logic
-	__webpack_require__(3);
-
 	// load sass manifest
-	__webpack_require__(5);
+	__webpack_require__(4);
 
 	// $(document).ready(() => {
 	//
 	// });
 
 /***/ },
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {'use strict';
@@ -80,7 +76,6 @@ webpackJsonp([0],[
 	    } else {
 	      this.player = 'o';
 	    }
-	    return;
 	  }
 	};
 
@@ -121,7 +116,6 @@ webpackJsonp([0],[
 	  }
 	  // ... and clears the HTML board
 	  $('.game-box').children().html("");
-	  return;
 	};
 
 	// Updates the score box displays
@@ -185,8 +179,6 @@ webpackJsonp([0],[
 	    processData: false,
 	    data: formData
 	  }).done(function (data) {
-	    console.log("Updated Successfully!");
-	    console.log(gamestate);
 	    console.log(data);
 	  }).fail(function (jqxhr) {
 	    console.error(jqxhr);
@@ -204,7 +196,6 @@ webpackJsonp([0],[
 
 	  $('#win-message').html(messageText);
 	  $('#win-message').show();
-	  return;
 	};
 
 	// Adds point to score of current player if a player won; otherwise adds a point
@@ -218,7 +209,6 @@ webpackJsonp([0],[
 
 	  gamestate.game++;
 	  gamestate.over = true;
-	  return;
 	};
 
 	var createGameApi = function createGameApi() {
@@ -257,7 +247,6 @@ webpackJsonp([0],[
 	  if (apiState.signedIn) {
 	    createGameApi();
 	  }
-	  return;
 	};
 
 	// Sets value of a square, then checks to see whether the move results in a win.
@@ -312,20 +301,16 @@ webpackJsonp([0],[
 
 	// On page load, sets up the board and sets event listeners
 	$(document).ready(function () {
-<<<<<<< HEAD
 	  newGame(gamestate);
-	  $('.bigDiv').hide();
-	  $('#win-message').hide();
-=======
-	  newGame(gameState, board);
 	  $('.modalBox').hide();
->>>>>>> master
+	  $('#win-message').hide();
+	  $('.logged').hide();
 
 	  // IMPORTANT
 	  // Recieves click input from user on board
 	  $('.game-box').children().on('click', function () {
 	    // hides open windows
-	    $('.bigDiv').hide();
+	    $('.modalBox').hide();
 	    apiState.modalOpen = false;
 	    // if the position on the board is empty, and the gamestate.over variable
 	    // is not set to true, the board display indicated the move and the game
@@ -435,8 +420,11 @@ webpackJsonp([0],[
 	      console.log(data);
 	      $('.form-field').val('');
 	      $('.modalBox').hide();
+	      $('.not-logged').hide();
+	      $('.logged').show();
 	      apiState.signedIn = true;
 	      apiState.modalOpen = false;
+	      gamestate.score.resetScore();
 	      newGame(gamestate, board);
 	      $('.user-name').html("Signed in as " + myApp.user.email);
 	    }).fail(function (jqxhr) {
@@ -449,7 +437,6 @@ webpackJsonp([0],[
 	    e.preventDefault();
 	    if (!myApp.user) {
 	      console.error('Wrong!');
-	      return;
 	    }
 
 	    var formData = new FormData(e.target);
@@ -478,7 +465,6 @@ webpackJsonp([0],[
 	  $('#sign-out-button').on('click', function () {
 	    if (!myApp.user) {
 	      console.error('Wrong!');
-	      return;
 	    }
 
 	    $.ajax({
@@ -490,6 +476,9 @@ webpackJsonp([0],[
 	    }).done(function (data) {
 	      console.log(data);
 	      apiState.signedIn = false;
+	      $('.logged').hide();
+	      $('.not-logged').show();
+	      gamestate.score.resetScore();
 	      newGame(gamestate, board);
 	      $('.user-name').html("");
 	    }).fail(function (data) {
@@ -497,20 +486,20 @@ webpackJsonp([0],[
 	    });
 	  });
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 4 */,
-/* 5 */
+/* 3 */,
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(6);
+	var content = __webpack_require__(5);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
+	var update = __webpack_require__(7)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -527,25 +516,21 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(7)();
+	exports = module.exports = __webpack_require__(6)();
 	// imports
 
 
 	// module
-<<<<<<< HEAD
-	exports.push([module.id, "body {\n  background-color: #fff;\n  color: #555;\n  margin-top: 20px;\n  font-size: 12px;\n  font-family: 'Cinzel', serif; }\n\nh1 {\n  text-align: center;\n  font-size: 36px; }\n\ndiv {\n  margin: 0 auto; }\n\n.bar div {\n  margin: 15px auto;\n  padding: 10px;\n  text-align: center; }\n\n.bar ul {\n  padding: 2px;\n  position: static;\n  margin: auto; }\n\n.bar li {\n  display: inline;\n  padding: 3px; }\n\n.game-button div {\n  display: inline;\n  padding: 2px;\n  background-color: #ff8383;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px;\n  transition: background-color .75s; }\n\n.game-button div:hover {\n  background-color: #cc6969;\n  cursor: pointer; }\n\n.scoreboard div {\n  display: inline;\n  width: auto;\n  padding: 2px 25px 2px 2px;\n  background-color: #fff;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px; }\n\n.scoreboard .score {\n  display: inline;\n  padding: 0 0 0 10px;\n  background-color: #fff;\n  border-color: #fff;\n  border-style: solid;\n  border-width: 0;\n  border-radius: 0; }\n\n.bottom-bar {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  background-color: #edd;\n  height: 90px;\n  font-size: 12px;\n  font-weight: bold;\n  text-align: center;\n  border-top-style: solid;\n  border-top-color: #555; }\n  .bottom-bar div {\n    margin: 15px auto;\n    padding: 5px 20px;\n    text-align: center;\n    transition: background-color .75s; }\n  .bottom-bar div:hover {\n    background-color: #cc6969;\n    cursor: pointer; }\n  .bottom-bar ul {\n    padding: 2px;\n    margin-top: 15px; }\n  .bottom-bar li {\n    display: inline;\n    padding: 3px; }\n  .bottom-bar .api-button {\n    display: inline;\n    padding: 2px;\n    background-color: #ff8383;\n    color: #000;\n    border-color: #000;\n    border-style: solid;\n    border-width: 2px;\n    border-radius: 3px; }\n\n.game-box {\n  margin: 0 auto;\n  background-color: #fff;\n  height: 300px;\n  width: 300px; }\n\n.square {\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n  background-color: #fff;\n  border-width: 2px;\n  box-sizing: border-box;\n  float: left;\n  font-size: 48px;\n  height: 33.33333%;\n  text-align: center;\n  padding-top: 18px;\n  width: 33.33333%;\n  transition: background-color .25s; }\n\n.square:hover {\n  background-color: #e6e6e6; }\n\n.top {\n  border-bottom: #555;\n  border-bottom-style: solid; }\n  .top .left {\n    clear: both;\n    border-top-left-radius: 20px; }\n\n.left {\n  border-right: #555;\n  border-right-style: solid; }\n\n.right {\n  border-left: #555;\n  border-left-style: solid; }\n\n.h-mid {\n  border-left: #555;\n  border-left-style: solid;\n  border-right: #555;\n  border-right-style: solid; }\n\n.v-mid {\n  border-bottom: #555;\n  border-bottom-style: solid;\n  border-top: #555;\n  border-top-style: solid; }\n\n.bottom {\n  border-top: #555;\n  border-top-style: solid; }\n\n.bigDiv {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  margin-top: -75px;\n  height: 150px;\n  margin-left: -137px;\n  background-color: #edd;\n  width: 274px;\n  text-align: left;\n  padding-left: 20px;\n  border-style: solid;\n  border-color: #555; }\n  .bigDiv form input {\n    padding: 3px;\n    margin: 5px; }\n\n.sign-up {\n  margin-top: -90px;\n  height: 180px; }\n\n#win-message {\n  font-size: 60px;\n  font-weight: bold;\n  padding: 20px 0;\n  text-align: center;\n  height: auto; }\n\n.user-name {\n  font-family: \"Inconsolata\";\n  font-size: 9.6px;\n  color: #f33;\n  position: absolute;\n  left: 5px;\n  bottom: 95px; }\n\n.my-games {\n  width: 300px;\n  height: 320px;\n  margin-top: -160px;\n  margin-left: -150px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  font-size: 8.4px; }\n  .my-games h3 {\n    position: relative;\n    top: 5px;\n    left: 5px;\n    color: #000;\n    font-size: 12px; }\n\n@media (max-height: 600px) {\n  .game-box {\n    height: 300px;\n    width: 300px; } }\n\n@media (min-width: 320px) {\n  font-size: 6px; }\n\n@media (min-width: 500px) {\n  body {\n    margin-top: 45px; }\n  .game-box {\n    height: 425px;\n    width: 425px; }\n  .game-button {\n    height: 38px;\n    width: 405px; } }\n\n@media (min-width: 800px) {\n  body {\n    margin-top: 45px; }\n  .game-box {\n    height: 500px;\n    width: 500px; }\n  .game-button {\n    height: 52px;\n    width: 490px; } }\n", ""]);
-=======
-	exports.push([module.id, "body {\n  background-color: #fff;\n  color: #555;\n  margin-top: 20px;\n  font-size: 12px;\n  font-family: 'Cinzel', serif; }\n\nh1 {\n  text-align: center;\n  font-size: 36px; }\n\ndiv {\n  margin: 0 auto; }\n\n.bar div {\n  margin: 15px auto;\n  padding: 10px;\n  text-align: center; }\n\n.bar ul {\n  padding: 2px;\n  position: static;\n  margin: auto; }\n\n.bar li {\n  display: inline;\n  padding: 3px; }\n\n.game-button div {\n  display: inline;\n  padding: 2px;\n  background-color: #ff8383;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px;\n  transition: background-color .75s; }\n\n.game-button div:hover {\n  background-color: #cc6969;\n  cursor: pointer; }\n\n.scoreboard div {\n  display: inline;\n  width: auto;\n  padding: 2px 25px 2px 2px;\n  background-color: #fff;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px; }\n\n.scoreboard .score {\n  display: inline;\n  padding: 0 0 0 10px;\n  background-color: #fff;\n  border-color: #fff;\n  border-style: solid;\n  border-width: 0;\n  border-radius: 0; }\n\n.bottom-bar {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  background-color: #edd;\n  height: 90px;\n  font-size: 12px;\n  font-weight: bold;\n  text-align: center;\n  border-top-style: solid;\n  border-top-color: #555; }\n  .bottom-bar div {\n    margin: 15px auto;\n    padding: 5px 20px;\n    text-align: center;\n    transition: background-color .75s; }\n  .bottom-bar div:hover {\n    background-color: #cc6969;\n    cursor: pointer; }\n  .bottom-bar ul {\n    padding: 2px;\n    margin-top: 15px; }\n  .bottom-bar li {\n    display: inline;\n    padding: 3px; }\n  .bottom-bar .api-button {\n    display: inline;\n    padding: 2px;\n    background-color: #ff8383;\n    color: #000;\n    border-color: #000;\n    border-style: solid;\n    border-width: 2px;\n    border-radius: 3px; }\n  .bottom-bar .my-games {\n    overflow-y: scroll; }\n\n.game-box {\n  margin: 0 auto;\n  background-color: #fff;\n  height: 300px;\n  width: 300px; }\n\n.square {\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n  background-color: #fff;\n  border-width: 2px;\n  box-sizing: border-box;\n  float: left;\n  font-size: 48px;\n  height: 33.33333%;\n  text-align: center;\n  padding-top: 18px;\n  width: 33.33333%;\n  transition: background-color .25s; }\n\n.square:hover {\n  background-color: #e6e6e6; }\n\n.top {\n  border-bottom: #555;\n  border-bottom-style: solid; }\n  .top .left {\n    clear: both;\n    border-top-left-radius: 20px; }\n\n.left {\n  border-right: #555;\n  border-right-style: solid; }\n\n.right {\n  border-left: #555;\n  border-left-style: solid; }\n\n.h-mid {\n  border-left: #555;\n  border-left-style: solid;\n  border-right: #555;\n  border-right-style: solid; }\n\n.v-mid {\n  border-bottom: #555;\n  border-bottom-style: solid;\n  border-top: #555;\n  border-top-style: solid; }\n\n.bottom {\n  border-top: #555;\n  border-top-style: solid; }\n\n.modalBox {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  margin-top: -75px;\n  height: 150px;\n  margin-left: -137px;\n  background-color: #edd;\n  width: 274px;\n  text-align: left;\n  padding-left: 20px;\n  border-style: solid;\n  border-color: #555; }\n  .modalBox form input {\n    padding: 3px;\n    margin: 5px; }\n\n.sign-up {\n  margin-top: -90px;\n  height: 180px; }\n\n.user-name {\n  font-family: \"Inconsolata\";\n  font-size: 9.6px;\n  color: #f33;\n  position: absolute;\n  left: 5px;\n  bottom: 95px; }\n\n.my-games {\n  width: 300px;\n  height: 320px;\n  margin-top: -160px;\n  margin-left: -150px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  font-size: 8.4px; }\n  .my-games h3 {\n    position: relative;\n    top: 5px;\n    left: 5px;\n    color: #000;\n    font-size: 12px; }\n\n@media (max-height: 600px) {\n  .game-box {\n    height: 300px;\n    width: 300px; } }\n\n@media (min-width: 320px) {\n  font-size: 6px; }\n\n@media (min-width: 500px) {\n  body {\n    margin-top: 45px; }\n  .game-box {\n    height: 425px;\n    width: 425px; }\n  .game-button {\n    height: 38px;\n    width: 405px; } }\n\n@media (min-width: 800px) {\n  body {\n    margin-top: 45px; }\n  .game-box {\n    height: 500px;\n    width: 500px; }\n  .game-button {\n    height: 52px;\n    width: 490px; } }\n", ""]);
->>>>>>> master
+	exports.push([module.id, "body {\n  background-color: #fff;\n  color: #555;\n  margin-top: 20px;\n  font-size: 12px;\n  font-family: 'Cinzel', serif; }\n\nh1 {\n  text-align: center;\n  font-size: 36px; }\n\ndiv {\n  margin: 0 auto; }\n\n.bar {\n  margin-top: 4em; }\n  .bar div {\n    margin: 15px auto;\n    padding: 10px;\n    text-align: center; }\n  .bar ul {\n    padding: 2px;\n    position: static;\n    margin: auto; }\n  .bar li {\n    display: inline;\n    padding: 3px; }\n\n#new-game {\n  display: inline;\n  padding: 2px;\n  background-color: #ff8383;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px;\n  transition: background-color .75s; }\n\n#new-game:hover {\n  background-color: #cc6969;\n  cursor: pointer; }\n\n.scoreboard div {\n  display: inline;\n  width: auto;\n  padding: 2px 25px 2px 2px;\n  background-color: #fff;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px; }\n\n.scoreboard .score {\n  display: inline;\n  padding: 0 0 0 10px;\n  background-color: #fff;\n  border-color: #fff;\n  border-style: solid;\n  border-width: 0;\n  border-radius: 0; }\n\n.bottom-bar {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  background-color: #edd;\n  height: 5em;\n  font-size: 12px;\n  font-weight: bold;\n  text-align: center;\n  border-top-style: solid;\n  border-top-color: #555; }\n  .bottom-bar div {\n    margin: 15px auto;\n    padding: 5px 20px;\n    text-align: center;\n    transition: background-color .75s; }\n  .bottom-bar div:hover {\n    background-color: #cc6969;\n    cursor: pointer; }\n  .bottom-bar ul {\n    padding: 2px;\n    margin-top: 1.5em; }\n  .bottom-bar li {\n    display: inline;\n    padding: 3px; }\n  .bottom-bar .api-button {\n    display: inline;\n    padding: 2px;\n    background-color: #ff8383;\n    color: #000;\n    border-color: #000;\n    border-style: solid;\n    border-width: 2px;\n    border-radius: 3px; }\n\n.game-box {\n  margin: 0 auto;\n  background-color: #fff;\n  height: 300px;\n  width: 300px; }\n\n.square {\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n  background-color: #fff;\n  border-width: 2px;\n  box-sizing: border-box;\n  float: left;\n  font-size: 48px;\n  height: 33.33333%;\n  text-align: center;\n  padding-top: 18px;\n  width: 33.33333%;\n  transition: background-color .25s; }\n\n.square:hover {\n  background-color: #e6e6e6; }\n\n.top {\n  border-bottom: #555;\n  border-bottom-style: solid; }\n  .top .left {\n    clear: both;\n    border-top-left-radius: 20px; }\n\n.left {\n  border-right: #555;\n  border-right-style: solid; }\n\n.right {\n  border-left: #555;\n  border-left-style: solid; }\n\n.h-mid {\n  border-left: #555;\n  border-left-style: solid;\n  border-right: #555;\n  border-right-style: solid; }\n\n.v-mid {\n  border-bottom: #555;\n  border-bottom-style: solid;\n  border-top: #555;\n  border-top-style: solid; }\n\n.bottom {\n  border-top: #555;\n  border-top-style: solid; }\n\n.modalBox {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  margin-top: -75px;\n  height: 150px;\n  margin-left: -137px;\n  background-color: #edd;\n  width: 274px;\n  text-align: left;\n  padding-left: 20px;\n  border-style: solid;\n  border-color: #555; }\n  .modalBox form input {\n    padding: 3px;\n    margin: 5px; }\n\n.sign-up {\n  margin-top: -90px;\n  height: 180px; }\n\n#win-message {\n  font-size: 60px;\n  font-weight: bold;\n  padding: 20px 0;\n  text-align: center;\n  height: auto; }\n\n.title {\n  margin: 1em; }\n\n.user-name {\n  font-family: \"Inconsolata\";\n  font-size: 9.6px;\n  color: #f33;\n  position: absolute;\n  left: 5px;\n  bottom: 6em; }\n\n.my-games {\n  width: 300px;\n  height: 320px;\n  margin-top: -160px;\n  margin-left: -150px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  font-size: 8.4px; }\n  .my-games h3 {\n    position: relative;\n    top: 5px;\n    left: 5px;\n    color: #000;\n    font-size: 12px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports) {
 
 	/*
@@ -601,7 +586,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -855,17 +840,17 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(4);
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(3);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(4);
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(3);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }

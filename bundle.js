@@ -52,12 +52,14 @@ webpackJsonp([0],[
 	};
 
 	// All variable stored in a single object
-	var gameState = {
+	var gamestate = {
 	  player: '',
+	  cells: [],
 	  over: false,
 	  turn: 0,
 	  game: 0,
 	  move: NaN,
+	  id: NaN,
 
 	  score: {
 	    x: 0,
@@ -113,9 +115,9 @@ webpackJsonp([0],[
 
 	// sets all values of the board tray to null...
 	// 8
-	var clearBoard = function clearBoard(board) {
+	var clearBoard = function clearBoard(gamestate) {
 	  for (var i = 0; i < 9; i++) {
-	    board[i] = '';
+	    gamestate.cells[i] = '';
 	  }
 	  // ... and clears the HTML board
 	  $('.game-box').children().html("");
@@ -165,16 +167,16 @@ webpackJsonp([0],[
 	  return 'Tie';
 	};
 
-	var updateGameApi = function updateGameApi(gameState) {
+	var updateFromGameToApi = function updateFromGameToApi(gamestate) {
 	  var formData = new FormData();
 
-	  formData.append("game[cell][index]", gameState.move);
-	  formData.append("game[cell][value]", gameState.player);
-	  formData.append("game[over]", gameState.over);
+	  formData.append("game[cell][index]", gamestate.move);
+	  formData.append("game[cell][value]", gamestate.player);
+	  formData.append("game[over]", gamestate.over);
 
 	  $.ajax({
 
-	    url: myApp.baseUrl + '/games/' + myApp.data.game.id,
+	    url: myApp.baseUrl + '/games/' + myApp.id,
 	    method: 'PATCH',
 	    headers: {
 	      Authorization: 'Token token=' + myApp.user.token
@@ -183,27 +185,39 @@ webpackJsonp([0],[
 	    processData: false,
 	    data: formData
 	  }).done(function (data) {
+	    console.log("Updated Successfully!");
+	    console.log(gamestate);
 	    console.log(data);
 	  }).fail(function (jqxhr) {
 	    console.error(jqxhr);
 	  });
 	};
 
-	// Adds point to score of current player if a player won; otherwise adds a point
-	// to the score for "tie". Increments gamecounter, sets "gameState.over" to
-	// true, and updates the score display
-	var endGame = function endGame(gameState, playerWin) {
-	  if (playerWin) {
-	    gameState.score[gameState.player]++;
+	var winMessage = function winMessage(gamestate, isWin) {
+	  var messageText = '';
+
+	  if (isWin) {
+	    messageText = gamestate.player + ' wins!';
 	  } else {
-	    gameState.score.tie++;
+	    messageText = 'Cat\'s Game!';
 	  }
-	  gameState.game++;
-	  gameState.over = true;
-	  if (apiState.signedIn) {
-	    updateGameApi(gameState);
-	  }
-	  displayScore(gameState.score);
+
+	  $('#win-message').html(messageText);
+	  $('#win-message').show();
+	  return;
+	};
+
+	// Adds point to score of current player if a player won; otherwise adds a point
+	// to the score for "tie". Increments gamecounter, sets "gamestate.over" to
+	// true, and updates the score display
+	var endGame = function endGame(gamestate, playerWin) {
+	  playerWin ? gamestate.score[gamestate.player]++ : gamestate.score.tie++;
+
+	  winMessage(gamestate, playerWin);
+	  displayScore(gamestate.score);
+
+	  gamestate.game++;
+	  gamestate.over = true;
 	  return;
 	};
 
@@ -219,7 +233,7 @@ webpackJsonp([0],[
 	    processData: false,
 	    data: new FormData()
 	  }).done(function (data) {
-	    myApp.data = data;
+	    myApp.id = data.game.id;
 	    console.log(data);
 	  }).fail(function (jqxhr) {
 	    console.error(jqxhr);
@@ -228,16 +242,17 @@ webpackJsonp([0],[
 
 	// clears the board, sets the player based on the game count, resets the turn
 	// count,and increments the game count
-	var newGame = function newGame(gameState, board) {
-	  clearBoard(board);
-	  displayScore(gameState.score);
-	  if (gameState.game % 2 === 0) {
-	    gameState.player = 'x';
+	var newGame = function newGame(gamestate) {
+	  clearBoard(gamestate);
+	  $('#win-message').hide();
+	  displayScore(gamestate.score);
+	  if (gamestate.game % 2 === 0) {
+	    gamestate.player = 'x';
 	  } else {
-	    gameState.player = 'o';
+	    gamestate.player = 'o';
 	  }
-	  gameState.over = false;
-	  gameState.turn = 0;
+	  gamestate.over = false;
+	  gamestate.turn = 0;
 
 	  if (apiState.signedIn) {
 	    createGameApi();
@@ -248,32 +263,30 @@ webpackJsonp([0],[
 	// Sets value of a square, then checks to see whether the move results in a win.
 	// If a player makes a winning move, or nine turns have passed without a win,
 	// the game ends.
-	var setSquare = function setSquare(gameState, board) {
-	  board[gameState.move] = gameState.player;
+	var setSquare = function setSquare(gamestate) {
+	  gamestate.cells[gamestate.move] = gamestate.player;
 	  // "linesForSquare[index]" is an array of strings, which
 	  // corrrespond to keys in the "lines" object
-	  for (var i = 0; i < linesForSquare[gameState.move].length; i++) {
+	  for (var i = 0; i < linesForSquare[gamestate.move].length; i++) {
 	    // for each key in "linesForSquare[index]", checks coordinates
 	    //  stored in "lines" object to see if the game is won
-	    if (winCheck(lines[linesForSquare[gameState.move][i]], board)) {
-	      endGame(gameState, true);
+	    if (winCheck(lines[linesForSquare[gamestate.move][i]], gamestate.cells)) {
+	      endGame(gamestate, true);
 	      return true;
 	    }
 	  }
 
 	  // If statement which either increments the turn
 	  // counter, or ends the game in a tie
-	  if (gameState.turn < 8) {
-	    gameState.turn++;
+	  if (gamestate.turn < 8) {
+	    gamestate.turn++;
 	  } else {
-	    endGame(gameState, false);
+	    endGame(gamestate, false);
 	  }
+	  //
 
-	  if (apiState.signedIn) {
-	    updateGameApi(gameState);
-	  }
 	  // if the game doesn't end, toggles player
-	  gameState.changePlayer();
+	  gamestate.changePlayer();
 	  return false;
 	};
 
@@ -288,7 +301,7 @@ webpackJsonp([0],[
 	    console.log(data);
 	    var htmlInsert = '';
 	    for (var i = 0; i < data.games.length; i++) {
-	      htmlInsert += '<li id="" class="one-game">Game ID: ' + data.games[i].id + ', winner: ' + returnWinner(data.games[i].cells, data.games[i].over) + ',<br>player x: ' + data.games[i].player_x.email + ',<br>player o: ' + (data.games[i].player_o ? data.games[i].player_o.email : 'none</li>');
+	      htmlInsert += '<li id="" class="one-game">Game ID: ' + data.games[i].id + ',\n                    winner: ' + returnWinner(data.games[i].cells, data.games[i].over) + ',\n                    <br>player x: ' + data.games[i].player_x.email + '<br>\n                    player o: ' + (data.games[i].player_o ? data.games[i].player_o.email : 'none') + '</li>';
 	    }
 
 	    $('.games-list').html(htmlInsert);
@@ -299,19 +312,27 @@ webpackJsonp([0],[
 
 	// On page load, sets up the board and sets event listeners
 	$(document).ready(function () {
-	  newGame(gameState, board);
+	  newGame(gamestate);
 	  $('.bigDiv').hide();
+	  $('#win-message').hide();
 
-	  // If any of the squares on the game board are clicked...
+	  // IMPORTANT
+	  // Recieves click input from user on board
 	  $('.game-box').children().on('click', function () {
-	    // "move" is set to a value on the board from 0-8
-	    gameState.move = event.target.id;
-	    // if the position on the board is empty, and the gameState.over variable
+	    // hides open windows
+	    $('.bigDiv').hide();
+	    apiState.modalOpen = false;
+	    // if the position on the board is empty, and the gamestate.over variable
 	    // is not set to true, the board display indicated the move and the game
 	    // setSquare variable checks the win conditions
-	    if (!board[gameState.move] && !gameState.over && !apiState.modalOpen) {
-	      $(this).html(gameState.player);
-	      gameState.over = setSquare(gameState, board);
+	    if (!gamestate.cells[event.target.id] && !gamestate.over) {
+	      $(this).html(gamestate.player);
+	      gamestate.move = event.target.id;
+	      gamestate.over = setSquare(gamestate, board);
+	    }
+
+	    if (apiState.signedIn) {
+	      updateFromGameToApi(gamestate);
 	    }
 	  });
 
@@ -321,8 +342,8 @@ webpackJsonp([0],[
 	  // who started the current game will start the next one
 	  $('#new-game').on('click', function () {
 	    if (!apiState.modalOpen) {
-	      gameState.changePlayer();
-	      newGame(gameState, board);
+	      gamestate.changePlayer();
+	      newGame(gamestate, board);
 	    }
 	  });
 
@@ -411,7 +432,7 @@ webpackJsonp([0],[
 	      $('.bigDiv').hide();
 	      apiState.signedIn = true;
 	      apiState.modalOpen = false;
-	      newGame(gameState, board);
+	      newGame(gamestate, board);
 	      $('.user-name').html("Signed in as " + myApp.user.email);
 	    }).fail(function (jqxhr) {
 	      console.error(jqxhr);
@@ -464,7 +485,7 @@ webpackJsonp([0],[
 	    }).done(function (data) {
 	      console.log(data);
 	      apiState.signedIn = false;
-	      newGame(gameState, board);
+	      newGame(gamestate, board);
 	      $('.user-name').html("");
 	    }).fail(function (data) {
 	      console.error(data);
@@ -509,7 +530,7 @@ webpackJsonp([0],[
 
 
 	// module
-	exports.push([module.id, "body {\n  background-color: #fff;\n  color: #555;\n  margin-top: 20px;\n  font-size: 12px;\n  font-family: 'Cinzel', serif; }\n\nh1 {\n  text-align: center;\n  font-size: 36px; }\n\ndiv {\n  margin: 0 auto; }\n\n.bar div {\n  margin: 15px auto;\n  padding: 10px;\n  text-align: center; }\n\n.bar ul {\n  padding: 2px;\n  position: static;\n  margin: auto; }\n\n.bar li {\n  display: inline;\n  padding: 3px; }\n\n.game-button div {\n  display: inline;\n  padding: 2px;\n  background-color: #ff8383;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px;\n  transition: background-color .75s; }\n\n.game-button div:hover {\n  background-color: #cc6969;\n  cursor: pointer; }\n\n.scoreboard div {\n  display: inline;\n  width: auto;\n  padding: 2px 25px 2px 2px;\n  background-color: #fff;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px; }\n\n.scoreboard .score {\n  display: inline;\n  padding: 0 0 0 10px;\n  background-color: #fff;\n  border-color: #fff;\n  border-style: solid;\n  border-width: 0;\n  border-radius: 0; }\n\n.bottom-bar {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  background-color: #edd;\n  height: 90px;\n  font-size: 12px;\n  font-weight: bold;\n  text-align: center;\n  border-top-style: solid;\n  border-top-color: #555; }\n  .bottom-bar div {\n    margin: 15px auto;\n    padding: 5px 20px;\n    text-align: center;\n    transition: background-color .75s; }\n  .bottom-bar div:hover {\n    background-color: #cc6969;\n    cursor: pointer; }\n  .bottom-bar ul {\n    padding: 2px;\n    margin-top: 15px; }\n  .bottom-bar li {\n    display: inline;\n    padding: 3px; }\n  .bottom-bar .api-button {\n    display: inline;\n    padding: 2px;\n    background-color: #ff8383;\n    color: #000;\n    border-color: #000;\n    border-style: solid;\n    border-width: 2px;\n    border-radius: 3px; }\n  .bottom-bar .my-games {\n    overflow-y: scroll; }\n\n.game-box {\n  margin: 0 auto;\n  background-color: #fff;\n  height: 300px;\n  width: 300px; }\n\n.square {\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n  background-color: #fff;\n  border-width: 2px;\n  box-sizing: border-box;\n  float: left;\n  font-size: 48px;\n  height: 33.33333%;\n  text-align: center;\n  padding-top: 18px;\n  width: 33.33333%;\n  transition: background-color .25s; }\n\n.square:hover {\n  background-color: #e6e6e6; }\n\n.top {\n  border-bottom: #555;\n  border-bottom-style: solid; }\n  .top .left {\n    clear: both;\n    border-top-left-radius: 20px; }\n\n.left {\n  border-right: #555;\n  border-right-style: solid; }\n\n.right {\n  border-left: #555;\n  border-left-style: solid; }\n\n.h-mid {\n  border-left: #555;\n  border-left-style: solid;\n  border-right: #555;\n  border-right-style: solid; }\n\n.v-mid {\n  border-bottom: #555;\n  border-bottom-style: solid;\n  border-top: #555;\n  border-top-style: solid; }\n\n.bottom {\n  border-top: #555;\n  border-top-style: solid; }\n\n.bigDiv {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  margin-top: -75px;\n  height: 150px;\n  margin-left: -137px;\n  background-color: #edd;\n  width: 274px;\n  text-align: left;\n  padding-left: 20px;\n  border-style: solid;\n  border-color: #555; }\n  .bigDiv form input {\n    padding: 3px;\n    margin: 5px; }\n\n.sign-up {\n  margin-top: -90px;\n  height: 180px; }\n\n.user-name {\n  font-family: \"Inconsolata\";\n  font-size: 9.6px;\n  color: #f33;\n  position: absolute;\n  left: 5px;\n  bottom: 95px; }\n\n.my-games {\n  width: 300px;\n  height: 320px;\n  margin-top: -160px;\n  margin-left: -150px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  font-size: 8.4px; }\n  .my-games h3 {\n    position: relative;\n    top: 5px;\n    left: 5px;\n    color: #000;\n    font-size: 12px; }\n\n@media (max-height: 600px) {\n  .game-box {\n    height: 300px;\n    width: 300px; } }\n\n@media (min-width: 320px) {\n  font-size: 6px; }\n\n@media (min-width: 500px) {\n  body {\n    margin-top: 45px; }\n  .game-box {\n    height: 425px;\n    width: 425px; }\n  .game-button {\n    height: 38px;\n    width: 405px; } }\n\n@media (min-width: 800px) {\n  body {\n    margin-top: 45px; }\n  .game-box {\n    height: 500px;\n    width: 500px; }\n  .game-button {\n    height: 52px;\n    width: 490px; } }\n", ""]);
+	exports.push([module.id, "body {\n  background-color: #fff;\n  color: #555;\n  margin-top: 20px;\n  font-size: 12px;\n  font-family: 'Cinzel', serif; }\n\nh1 {\n  text-align: center;\n  font-size: 36px; }\n\ndiv {\n  margin: 0 auto; }\n\n.bar div {\n  margin: 15px auto;\n  padding: 10px;\n  text-align: center; }\n\n.bar ul {\n  padding: 2px;\n  position: static;\n  margin: auto; }\n\n.bar li {\n  display: inline;\n  padding: 3px; }\n\n.game-button div {\n  display: inline;\n  padding: 2px;\n  background-color: #ff8383;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px;\n  transition: background-color .75s; }\n\n.game-button div:hover {\n  background-color: #cc6969;\n  cursor: pointer; }\n\n.scoreboard div {\n  display: inline;\n  width: auto;\n  padding: 2px 25px 2px 2px;\n  background-color: #fff;\n  color: #000;\n  border-color: #000;\n  border-style: solid;\n  border-width: 2px;\n  border-radius: 3px; }\n\n.scoreboard .score {\n  display: inline;\n  padding: 0 0 0 10px;\n  background-color: #fff;\n  border-color: #fff;\n  border-style: solid;\n  border-width: 0;\n  border-radius: 0; }\n\n.bottom-bar {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  background-color: #edd;\n  height: 90px;\n  font-size: 12px;\n  font-weight: bold;\n  text-align: center;\n  border-top-style: solid;\n  border-top-color: #555; }\n  .bottom-bar div {\n    margin: 15px auto;\n    padding: 5px 20px;\n    text-align: center;\n    transition: background-color .75s; }\n  .bottom-bar div:hover {\n    background-color: #cc6969;\n    cursor: pointer; }\n  .bottom-bar ul {\n    padding: 2px;\n    margin-top: 15px; }\n  .bottom-bar li {\n    display: inline;\n    padding: 3px; }\n  .bottom-bar .api-button {\n    display: inline;\n    padding: 2px;\n    background-color: #ff8383;\n    color: #000;\n    border-color: #000;\n    border-style: solid;\n    border-width: 2px;\n    border-radius: 3px; }\n\n.game-box {\n  margin: 0 auto;\n  background-color: #fff;\n  height: 300px;\n  width: 300px; }\n\n.square {\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n  background-color: #fff;\n  border-width: 2px;\n  box-sizing: border-box;\n  float: left;\n  font-size: 48px;\n  height: 33.33333%;\n  text-align: center;\n  padding-top: 18px;\n  width: 33.33333%;\n  transition: background-color .25s; }\n\n.square:hover {\n  background-color: #e6e6e6; }\n\n.top {\n  border-bottom: #555;\n  border-bottom-style: solid; }\n  .top .left {\n    clear: both;\n    border-top-left-radius: 20px; }\n\n.left {\n  border-right: #555;\n  border-right-style: solid; }\n\n.right {\n  border-left: #555;\n  border-left-style: solid; }\n\n.h-mid {\n  border-left: #555;\n  border-left-style: solid;\n  border-right: #555;\n  border-right-style: solid; }\n\n.v-mid {\n  border-bottom: #555;\n  border-bottom-style: solid;\n  border-top: #555;\n  border-top-style: solid; }\n\n.bottom {\n  border-top: #555;\n  border-top-style: solid; }\n\n.bigDiv {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  margin-top: -75px;\n  height: 150px;\n  margin-left: -137px;\n  background-color: #edd;\n  width: 274px;\n  text-align: left;\n  padding-left: 20px;\n  border-style: solid;\n  border-color: #555; }\n  .bigDiv form input {\n    padding: 3px;\n    margin: 5px; }\n\n.sign-up {\n  margin-top: -90px;\n  height: 180px; }\n\n#win-message {\n  font-size: 60px;\n  font-weight: bold;\n  padding: 20px 0;\n  text-align: center;\n  height: auto; }\n\n.user-name {\n  font-family: \"Inconsolata\";\n  font-size: 9.6px;\n  color: #f33;\n  position: absolute;\n  left: 5px;\n  bottom: 95px; }\n\n.my-games {\n  width: 300px;\n  height: 320px;\n  margin-top: -160px;\n  margin-left: -150px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  font-size: 8.4px; }\n  .my-games h3 {\n    position: relative;\n    top: 5px;\n    left: 5px;\n    color: #000;\n    font-size: 12px; }\n\n@media (max-height: 600px) {\n  .game-box {\n    height: 300px;\n    width: 300px; } }\n\n@media (min-width: 320px) {\n  font-size: 6px; }\n\n@media (min-width: 500px) {\n  body {\n    margin-top: 45px; }\n  .game-box {\n    height: 425px;\n    width: 425px; }\n  .game-button {\n    height: 38px;\n    width: 405px; } }\n\n@media (min-width: 800px) {\n  body {\n    margin-top: 45px; }\n  .game-box {\n    height: 500px;\n    width: 500px; }\n  .game-button {\n    height: 52px;\n    width: 490px; } }\n", ""]);
 
 	// exports
 

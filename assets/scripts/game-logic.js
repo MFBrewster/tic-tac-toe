@@ -259,6 +259,7 @@ $(document).ready(() => {
   newGame(gamestate);
   $('.modalBox').hide();
   $('#win-message').hide();
+  $('.logged').hide();
 
 
   // IMPORTANT
@@ -373,6 +374,8 @@ $(document).ready(() => {
       console.log(data);
       $('.form-field').val('');
       $('.modalBox').hide();
+      $('.not-logged').hide();
+      $('.logged').show();
       apiState.signedIn = true;
       apiState.modalOpen = false;
       newGame(gamestate, board);
@@ -426,6 +429,8 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       apiState.signedIn = false;
+      $('.logged').hide();
+      $('.not-logged').show();
       gamestate.score.resetScore();
       newGame(gamestate, board);
       $('.user-name').html("");

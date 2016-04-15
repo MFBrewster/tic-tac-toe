@@ -257,7 +257,7 @@ let listGames = function() {
 // On page load, sets up the board and sets event listeners
 $(document).ready(() => {
   newGame(gamestate);
-  $('.bigDiv').hide();
+  $('.modalBox').hide();
   $('#win-message').hide();
 
 
@@ -265,7 +265,7 @@ $(document).ready(() => {
   // Recieves click input from user on board
   $('.game-box').children().on('click', function() {
     // hides open windows
-    $('.bigDiv').hide();
+    $('.modalBox').hide();
     apiState.modalOpen = false;
     // if the position on the board is empty, and the gamestate.over variable
     // is not set to true, the board display indicated the move and the game
@@ -292,14 +292,14 @@ $(document).ready(() => {
 
   $('#sign-up-button').on('click', function() {
     if (!apiState.modalOpen) {
-      $('.sign-up.bigDiv').show();
+      $('.sign-up.modalBox').show();
       apiState.modalOpen = true;
     }
   });
 
   $('#sign-in-button').on('click', function() {
     if (!apiState.modalOpen) {
-      $('.sign-in.bigDiv').show();
+      $('.sign-in.modalBox').show();
       apiState.modalOpen = true;
     }
   });
@@ -307,7 +307,7 @@ $(document).ready(() => {
   $('#change-password-button').on('click', function() {
   // for some reason this if statement doesn't work if I include the commented code
     if (!apiState.modalOpen/* && !apiState.signedIn*/) {
-      $('.change-password.bigDiv').show();
+      $('.change-password.modalBox').show();
       apiState.modalOpen = true;
     }
   });
@@ -316,14 +316,14 @@ $(document).ready(() => {
     if (!apiState.modalOpen && apiState.signedIn) {
       $('.games-label').html(myApp.user.email + "'s Games");
       listGames();
-      $('.my-games.bigDiv').show();
+      $('.my-games.modalBox').show();
       apiState.modalOpen = true;
     }
   });
 
   $(document).keyup(function(e) {
        if (e.keyCode === 27) {
-         $('.bigDiv').hide();
+         $('.modalBox').hide();
          apiState.modalOpen = false;
       }
   });
@@ -346,7 +346,7 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       $('.form-field').val('');
-      $('.bigDiv').hide();
+      $('.modalBox').hide();
       apiState.modalOpen = false;
     }).fail(function(jqxhr) {
       console.error(jqxhr);
@@ -372,7 +372,7 @@ $(document).ready(() => {
       myApp.user = data.user;
       console.log(data);
       $('.form-field').val('');
-      $('.bigDiv').hide();
+      $('.modalBox').hide();
       apiState.signedIn = true;
       apiState.modalOpen = false;
       newGame(gamestate, board);
@@ -404,7 +404,7 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       $('.form-field').val('');
-      $('.bigDiv').hide();
+      $('.modalBox').hide();
       apiState.modalOpen = false;
     }).fail(function(jqxhr) {
       console.error(jqxhr);

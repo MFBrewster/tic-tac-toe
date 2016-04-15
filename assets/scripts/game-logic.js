@@ -378,6 +378,7 @@ $(document).ready(() => {
       $('.logged').show();
       apiState.signedIn = true;
       apiState.modalOpen = false;
+      gamestate.score.resetScore();
       newGame(gamestate, board);
       $('.user-name').html("Signed in as " + myApp.user.email);
     }).fail(function(jqxhr) {

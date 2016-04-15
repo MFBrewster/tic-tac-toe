@@ -31,7 +31,6 @@ let gamestate = {
   changePlayer: function() {
     if (!this.player || this.player === 'o') { this.player = 'x';
     } else { this.player = 'o'; }
-    return;
   },
 };
 
@@ -73,7 +72,6 @@ let clearBoard = function(gamestate) {
   }
   // ... and clears the HTML board
   $('.game-box').children().html("");
-  return;
 };
 
 // Updates the score box displays
@@ -139,8 +137,6 @@ let updateFromGameToApi = function(gamestate) {
     processData: false,
     data: formData,
   }).done(function(data) {
-    console.log("Updated Successfully!");
-    console.log(gamestate);
     console.log(data);
   }).fail(function(jqxhr) {
     console.error(jqxhr);
@@ -155,7 +151,6 @@ let winMessage = function(gamestate, isWin) {
 
   $('#win-message').html(messageText);
   $('#win-message').show();
-  return;
 };
 
 // Adds point to score of current player if a player won; otherwise adds a point
@@ -169,7 +164,6 @@ let endGame = function(gamestate, playerWin) {
 
   gamestate.game++;
   gamestate.over = true;
-  return;
 };
 
 let createGameApi = function() {
@@ -205,7 +199,6 @@ let newGame = function(gamestate) {
   if (apiState.signedIn) {
     createGameApi();
   }
-  return;
 };
 
 // Sets value of a square, then checks to see whether the move results in a win.
@@ -264,15 +257,16 @@ let listGames = function() {
 // On page load, sets up the board and sets event listeners
 $(document).ready(() => {
   newGame(gamestate);
-  $('.bigDiv').hide();
+  $('.modalBox').hide();
   $('#win-message').hide();
+  $('.logged').hide();
 
 
   // IMPORTANT
   // Recieves click input from user on board
   $('.game-box').children().on('click', function() {
     // hides open windows
-    $('.bigDiv').hide();
+    $('.modalBox').hide();
     apiState.modalOpen = false;
     // if the position on the board is empty, and the gamestate.over variable
     // is not set to true, the board display indicated the move and the game
@@ -299,14 +293,14 @@ $(document).ready(() => {
 
   $('#sign-up-button').on('click', function() {
     if (!apiState.modalOpen) {
-      $('.sign-up.bigDiv').show();
+      $('.sign-up.modalBox').show();
       apiState.modalOpen = true;
     }
   });
 
   $('#sign-in-button').on('click', function() {
     if (!apiState.modalOpen) {
-      $('.sign-in.bigDiv').show();
+      $('.sign-in.modalBox').show();
       apiState.modalOpen = true;
     }
   });
@@ -314,7 +308,7 @@ $(document).ready(() => {
   $('#change-password-button').on('click', function() {
   // for some reason this if statement doesn't work if I include the commented code
     if (!apiState.modalOpen/* && !apiState.signedIn*/) {
-      $('.change-password.bigDiv').show();
+      $('.change-password.modalBox').show();
       apiState.modalOpen = true;
     }
   });
@@ -323,14 +317,14 @@ $(document).ready(() => {
     if (!apiState.modalOpen && apiState.signedIn) {
       $('.games-label').html(myApp.user.email + "'s Games");
       listGames();
-      $('.my-games.bigDiv').show();
+      $('.my-games.modalBox').show();
       apiState.modalOpen = true;
     }
   });
 
   $(document).keyup(function(e) {
        if (e.keyCode === 27) {
-         $('.bigDiv').hide();
+         $('.modalBox').hide();
          apiState.modalOpen = false;
       }
   });
@@ -353,7 +347,7 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       $('.form-field').val('');
-      $('.bigDiv').hide();
+      $('.modalBox').hide();
       apiState.modalOpen = false;
     }).fail(function(jqxhr) {
       console.error(jqxhr);
@@ -379,9 +373,12 @@ $(document).ready(() => {
       myApp.user = data.user;
       console.log(data);
       $('.form-field').val('');
-      $('.bigDiv').hide();
+      $('.modalBox').hide();
+      $('.not-logged').hide();
+      $('.logged').show();
       apiState.signedIn = true;
       apiState.modalOpen = false;
+      gamestate.score.resetScore();
       newGame(gamestate, board);
       $('.user-name').html("Signed in as " + myApp.user.email);
     }).fail(function(jqxhr) {
@@ -394,7 +391,6 @@ $(document).ready(() => {
     e.preventDefault();
     if (!myApp.user) {
       console.error('Wrong!');
-      return;
     }
 
     var formData = new FormData(e.target);
@@ -412,7 +408,7 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       $('.form-field').val('');
-      $('.bigDiv').hide();
+      $('.modalBox').hide();
       apiState.modalOpen = false;
     }).fail(function(jqxhr) {
       console.error(jqxhr);
@@ -423,7 +419,6 @@ $(document).ready(() => {
   $('#sign-out-button').on('click', function() {
     if (!myApp.user) {
       console.error('Wrong!');
-      return;
     }
 
     $.ajax({
@@ -435,6 +430,9 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       apiState.signedIn = false;
+      $('.logged').hide();
+      $('.not-logged').show();
+      gamestate.score.resetScore();
       newGame(gamestate, board);
       $('.user-name').html("");
     }).fail(function(data) {

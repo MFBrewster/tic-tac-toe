@@ -7,7 +7,7 @@
       <title>A Tic-Tac-Toe Game</title>
     </head>
     <body>
-      <h1>Tic-Tac-Toe</h1>
+      <h1 class="title">Tic-Tac-Toe</h1>
 
       <div class="game-box">
           <div class="top left square" id=0></div>
@@ -21,26 +21,20 @@
           <div class="bottom right square" id=8></div>
       </div>
 
-      <div id="win-message" class="bigDiv"></div>
+      <div id="win-message" class="modalBox"></div>
 
       <div class="bar">
-        <div class="game-button">
-          <ul>
-            <li><div>Vs. Computer</div></li>
-            <li><div>Two Player</div></li>
-            <li><div id="new-game">New Game</div></li>
-          </ul>
-        </div>
         <div class="scoreboard">
           <ul>
-            <li id="x"><div>x: <div class="score"></div></div></li>
-            <li id="o"><div>o: <div class="score"></div></div></li>
-            <li id="tie"><div>tie: <div class="score"></div></div></li>
+            <li id="x"><div>x: <span class="score"></span></div></li>
+            <li id="o"><div>o: <span class="score"></span></div></li>
+            <li id="tie"><div>tie: <span class="score"></span></div></li>
+            <li><div id="new-game">New Game</div></li>
           </ul>
         </div>
       </div>
 
-      <div class="sign-up bigDiv">
+      <div class="sign-up modalBox">
         <form id="sign-up">
           <p>Sign up</p>
           <label>E-mail
@@ -56,7 +50,7 @@
         </form>
       </div>
 
-      <div class="sign-in bigDiv">
+      <div class="sign-in modalBox">
         <form id="sign-in">
           <p>Sign in</p>
           <label>E-mail
@@ -69,7 +63,7 @@
         </form>
       </div>
 
-      <div class="change-password bigDiv">
+      <div class="change-password modalBox">
         <form id="change-password">
           <p>Change password</p>
           <label>Old Password
@@ -82,7 +76,7 @@
         </form>
       </div>
 
-      <div class="my-games bigDiv">
+      <div class="my-games modalBox">
         <h3 class="games-label"></h3>
         <ul class="games-list">
         </ul>
@@ -91,13 +85,11 @@
       <p class="user-name"></p>
       <div class="bottom-bar">
         <ul>
-          <li><div id="sign-up-button" class="api-button">Sign Up</div></li>
-          <li><div id="sign-in-button" class="api-button">Sign In</div></li>
-          <li><div id="change-password-button" class="api-button">Change Password</div></li>
-        </ul>
-        <ul>
-          <li><div id="sign-out-button" class="api-button">Sign Out</div></li>
-          <li><div id="my-games-button" class="api-button">My Games</div></li>
+          <li><div id="sign-up-button" class="api-button not-logged">Sign Up</div></li>
+          <li><div id="sign-in-button" class="api-button not-logged">Sign In</div></li>
+          <li><div id="change-password-button" class="api-button logged">Change Password</div></li>
+          <li><div id="sign-out-button" class="api-button logged">Sign Out</div></li>
+          <li><div id="my-games-button" class="api-button logged">My Games</div></li>
         </ul>
       </div>
       <script src="http://localhost:8080/webpack-dev-server.js"></script>

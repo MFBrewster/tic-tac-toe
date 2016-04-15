@@ -1,7 +1,5 @@
 app.js
-vendor.js
 specs.js
-*bundle.js
 _SpecRunner.html
 
 # Created by https://www.gitignore.io

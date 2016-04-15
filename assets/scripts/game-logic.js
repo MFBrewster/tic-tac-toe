@@ -31,7 +31,6 @@ let gamestate = {
   changePlayer: function() {
     if (!this.player || this.player === 'o') { this.player = 'x';
     } else { this.player = 'o'; }
-    return;
   },
 };
 
@@ -73,7 +72,6 @@ let clearBoard = function(gamestate) {
   }
   // ... and clears the HTML board
   $('.game-box').children().html("");
-  return;
 };
 
 // Updates the score box displays
@@ -139,8 +137,6 @@ let updateFromGameToApi = function(gamestate) {
     processData: false,
     data: formData,
   }).done(function(data) {
-    console.log("Updated Successfully!");
-    console.log(gamestate);
     console.log(data);
   }).fail(function(jqxhr) {
     console.error(jqxhr);
@@ -155,7 +151,6 @@ let winMessage = function(gamestate, isWin) {
 
   $('#win-message').html(messageText);
   $('#win-message').show();
-  return;
 };
 
 // Adds point to score of current player if a player won; otherwise adds a point
@@ -169,7 +164,6 @@ let endGame = function(gamestate, playerWin) {
 
   gamestate.game++;
   gamestate.over = true;
-  return;
 };
 
 let createGameApi = function() {
@@ -205,7 +199,6 @@ let newGame = function(gamestate) {
   if (apiState.signedIn) {
     createGameApi();
   }
-  return;
 };
 
 // Sets value of a square, then checks to see whether the move results in a win.
@@ -394,7 +387,6 @@ $(document).ready(() => {
     e.preventDefault();
     if (!myApp.user) {
       console.error('Wrong!');
-      return;
     }
 
     var formData = new FormData(e.target);
@@ -423,7 +415,6 @@ $(document).ready(() => {
   $('#sign-out-button').on('click', function() {
     if (!myApp.user) {
       console.error('Wrong!');
-      return;
     }
 
     $.ajax({
@@ -435,6 +426,7 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       apiState.signedIn = false;
+      gamestate.score.resetScore();
       newGame(gamestate, board);
       $('.user-name').html("");
     }).fail(function(data) {

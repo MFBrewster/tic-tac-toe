@@ -7,7 +7,7 @@
       <title>A Tic-Tac-Toe Game</title>
     </head>
     <body>
-      <h1>Tic-Tac-Toe</h1>
+      <h1 class="title">Tic-Tac-Toe</h1>
 
       <div class="game-box">
           <div class="top left square" id=0></div>
@@ -91,13 +91,11 @@
       <p class="user-name"></p>
       <div class="bottom-bar">
         <ul>
-          <li><div id="sign-up-button" class="api-button">Sign Up</div></li>
-          <li><div id="sign-in-button" class="api-button">Sign In</div></li>
-          <li><div id="change-password-button" class="api-button">Change Password</div></li>
-        </ul>
-        <ul>
-          <li><div id="sign-out-button" class="api-button">Sign Out</div></li>
-          <li><div id="my-games-button" class="api-button">My Games</div></li>
+          <li><div id="sign-up-button" class="api-button not-logged">Sign Up</div></li>
+          <li><div id="sign-in-button" class="api-button not-logged">Sign In</div></li>
+          <li><div id="change-password-button" class="api-button logged">Change Password</div></li>
+          <li><div id="sign-out-button" class="api-button logged">Sign Out</div></li>
+          <li><div id="my-games-button" class="api-button logged">My Games</div></li>
         </ul>
       </div>
       <script src="http://localhost:8080/webpack-dev-server.js"></script>

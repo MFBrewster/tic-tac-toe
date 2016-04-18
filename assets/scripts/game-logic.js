@@ -264,7 +264,9 @@ $(document).ready(() => {
 
   // IMPORTANT
   // Recieves click input from user on board
-  $('.game-box').children().on('click', function() {
+  $('.game-box').children().on('click', function(e) {
+    // Stops event from bubbling up
+    e.stopPropagation();
     // hides open windows
     $('.modalBox').hide();
     apiState.modalOpen = false;
@@ -278,6 +280,12 @@ $(document).ready(() => {
     }
 
     if (apiState.signedIn) { updateFromGameToApi(gamestate); }
+  });
+
+  $('body').on('click', function() {
+    console.log('click heard');
+    $('#win-message').hide();
+    apiState.modalOpen = false;
   });
 
   // When the new-game button is clicked, the player is toggled before the

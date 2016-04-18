@@ -308,7 +308,9 @@ webpackJsonp([0],[
 
 	  // IMPORTANT
 	  // Recieves click input from user on board
-	  $('.game-box').children().on('click', function () {
+	  $('.game-box').children().on('click', function (e) {
+	    // Stops event from bubbling up
+	    e.stopPropagation();
 	    // hides open windows
 	    $('.modalBox').hide();
 	    apiState.modalOpen = false;
@@ -324,6 +326,12 @@ webpackJsonp([0],[
 	    if (apiState.signedIn) {
 	      updateFromGameToApi(gamestate);
 	    }
+	  });
+
+	  $('body').on('click', function () {
+	    console.log('click heard');
+	    $('#win-message').hide();
+	    apiState.modalOpen = false;
 	  });
 
 	  // When the new-game button is clicked, the player is toggled before the
@@ -476,7 +484,7 @@ webpackJsonp([0],[
 	    }).done(function (data) {
 	      console.log(data);
 	      apiState.signedIn = false;
-	      $('.logged').hide();
+	      $('.logged, .modalBox').hide();
 	      $('.not-logged').show();
 	      gamestate.score.resetScore();
 	      newGame(gamestate, board);

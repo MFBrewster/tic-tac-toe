@@ -430,7 +430,7 @@ $(document).ready(() => {
     }).done(function(data) {
       console.log(data);
       apiState.signedIn = false;
-      $('.logged').hide();
+      $('.logged, .modalBox').hide();
       $('.not-logged').show();
       gamestate.score.resetScore();
       newGame(gamestate, board);
